@@ -18,6 +18,9 @@ const db = mongojs(config.MONGODB_URL);
 const bodyParser = require('body-parser');
 app.use(bodyParser.json());
 
+const swaggerJSDoc = require('swagger-jsdoc');
+const swaggerUi = require('swagger-ui-express');
+
 app.use(express.static('public'));
 
 app.use((req, res, next) => {
@@ -41,8 +44,79 @@ let users_router = express.Router();
 require('./routes/users')(users_router, db, mongojs, jwt, config);
 app.use('./users', users_router);
 
-//login call
-app.get('/login', async (req, res) => {
+/** Swagger setup */
+const swaggerDefinition = {
+    info: {
+        title: 'Trackr Swagger API Documentation',
+        version: '0.1.0',
+    },
+    host: config.SWAGGER_HOST,
+    basePath: '/',
+    securityDefinitions: {
+        bearerAuth: {
+            type: 'apiKey',
+            name: 'auth',
+            scheme: 'bearer',
+            in: 'header',
+        },
+    },
+};
+
+const options = {
+    swaggerDefinition,
+    apis: [
+        './src/api/index.js',
+        './src/api/routes/*'
+    ],
+};
+
+const swaggerSpec = swaggerJSDoc(options);
+
+app.get('/swagger.json', (req, res) => {
+    res.setHeader('Content-Type', 'application/json');
+    res.send(swaggerSpec);
+});
+
+app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerSpec));
+
+    /**
+    * @swagger
+    * /login:
+    *   post:
+    *     tags:
+    *       - auth
+    *     name: login
+    *     summary: Logs the user in and returns the user info and token
+    *     produces:
+    *       - application/json
+    *     parameters:
+    *       - in: body
+    *         name: body
+    *         description: credentials
+    *         required: true
+    *         schema:
+    *             type: object
+    *             properties:
+    *                 username:
+    *                     type: string
+    *                     example: kiradon
+    *                 password:
+    *                     type: string
+    *                     example: test
+    *                 required:
+    *                     - username
+    *                     - password
+    *     responses:
+    *       200:
+    *         description: Returns the user information and token
+    *       400:
+    *           description: Invalid user request.
+    *       404:
+    *           description: User not found/Wrong credentials.
+    *       500:
+    *         description: Something is wrong with the service. Please contact the system administrator.
+    */
+app.post('/login', async (req, res) => {
     console.log("Login route");
 
     try {
@@ -66,10 +140,9 @@ app.get('/login', async (req, res) => {
 
 //register call
 app.post('/register', async (req, res) => {
-    console.log("Login route");
+    console.log("Register route");
 
     try {
-        let user;
         await db.users.findOne({ username: req.body.username }, async (err, docs) => {
             if (docs != null) {
                 return res.status(400).send("Register failed! User already exists");
@@ -81,6 +154,10 @@ app.post('/register', async (req, res) => {
                 firstName: req.body.firstName,
                 role: 4,
                 lastName: req.body.lastName
+            }, (error, response) => {
+                if (error) {
+                    return res.status(400).send(`Insertion failed! Reason: ${error.errmsg}`);
+                }
             })
         });
     } catch (error) {
