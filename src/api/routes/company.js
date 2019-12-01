@@ -1,6 +1,6 @@
 module.exports = (router, db, mongojs, jwt, config) => {
   router.use((req, res, next) => {
-    console.log(`Admin route accessed by: ${req.ip}`); // log visits
+    console.log(`Company route accessed by: ${req.ip}`); // log visits
 
     /* Check for proper JWT */
     let authorization = req.get("auth");
@@ -28,7 +28,7 @@ module.exports = (router, db, mongojs, jwt, config) => {
 
   /**
    * @swagger
-   * /admin/users:
+   * /company/users:
    *   get:
    *     tags:
    *       - users
@@ -52,7 +52,7 @@ module.exports = (router, db, mongojs, jwt, config) => {
 
   /**
    * @swagger
-   * /admin/users/{username}:
+   * /company/users/{username}:
    *   get:
    *     tags:
    *       - users

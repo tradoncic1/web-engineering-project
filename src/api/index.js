@@ -44,9 +44,9 @@ app.use((req, res, next) => {
 });
 
 //admin router setup
-let admin_router = express.Router();
-require("./routes/admin.js")(admin_router, db, mongojs, jwt, config);
-app.use("/admin", admin_router);
+let company_router = express.Router();
+require("./routes/company.js")(company_router, db, mongojs, jwt, config);
+app.use("/company", company_router);
 
 //tickets router setup
 let tickets_router = express.Router();
