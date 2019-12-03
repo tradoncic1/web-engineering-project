@@ -7,8 +7,6 @@ node_modules/
 api/node_modules/
 api/config.js
 
-# Frontend .gitignore
-
 # dependencies
 frontend/node_modules
 frontend/.pnp
