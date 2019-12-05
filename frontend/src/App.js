@@ -8,7 +8,6 @@ const App = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // await fetch("https://jsonplaceholder.typicode.com/posts")
         await fetch("http://localhost:5000/users")
           .then(response => response.json())
           .then(json => setUsers(json));
