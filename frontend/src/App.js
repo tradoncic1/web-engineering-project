@@ -1,8 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState, useEffect } from "react";
+import logo from "./logo.svg";
+import "./App.css";
 
-function App() {
+const App = () => {
+  const [users, setUsers] = useState([]);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        // await fetch("https://jsonplaceholder.typicode.com/posts")
+        await fetch("http://localhost:5000/users")
+          .then(response => response.json())
+          .then(json => setUsers(json));
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    fetchData();
+  }, []);
+
   return (
     <div className="App">
       <header className="App-header">
@@ -18,9 +35,18 @@ function App() {
         >
           Learn React
         </a>
+        <ul>
+          {users.map((user, key) => {
+            return (
+              <li key={key}>
+                {user.firstName} {user.lastName}
+              </li>
+            );
+          })}
+        </ul>
       </header>
     </div>
   );
-}
+};
 
 export default App;
