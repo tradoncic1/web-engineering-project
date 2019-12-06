@@ -1,30 +1,24 @@
 import React, { useState, useEffect } from "react";
+import {
+  FormFeedback,
+  Col,
+  Form,
+  FormGroup,
+  Label,
+  Input,
+  Button
+} from "reactstrap";
 import { BASE_URL } from "../../utils";
 
 import "./Login.scss";
+import LandingNavbar from "../../Components/Navbars/LandingNavbar";
 
 const Login = () => {
-  const [users, setUsers] = useState([]);
   const [input, setInput] = useState({
     username: "",
     password: ""
   });
-  const [exists, setExists] = useState(null);
-  const [expanded, setExpanded] = useState(false);
-
-  useEffect(() => {
-    const fetchData = async () => {
-      try {
-        await fetch(`${BASE_URL}/users`)
-          .then(response => response.json())
-          .then(json => setUsers(json));
-      } catch (error) {
-        console.log(error);
-      }
-    };
-
-    fetchData();
-  }, []);
+  const [exists, setExists] = useState(false);
 
   const handleInput = event => {
     setInput({
@@ -35,6 +29,7 @@ const Login = () => {
 
   const login = async () => {
     try {
+      setExists(false);
       const loginResponse = await fetch(`${BASE_URL}/login`, {
         method: "POST",
         headers: {
@@ -47,56 +42,55 @@ const Login = () => {
         })
       });
       const content = await loginResponse.json();
-      content ? setExists(true) : setExists(false);
+      setExists(true);
+      console.log(content);
     } catch (error) {
       console.log(error);
-      setExists(false);
     }
   };
 
   return (
-    <header className="App-header">
-      <div className="form-wrap">
-        <div className="form">
-          <div>
-            <label>Username</label>
-            <input
-              type="text"
-              name="username"
-              value={input.username}
-              onChange={handleInput}
-            />
-            <label>Password</label>
-            <input
-              type="password"
-              name="password"
-              value={input.password}
-              onChange={handleInput}
-            />
+    <div className="Login-Page">
+      <LandingNavbar />
+      <div className="LoginForm-Wrapper">
+        <Form className="form">
+          <Col>
+            <FormGroup>
+              <Label>Email</Label>
+              <Input
+                type="username"
+                name="username"
+                id="exampleUsername"
+                placeholder="username"
+                value={input.username}
+                onChange={handleInput}
+              />
+            </FormGroup>
+          </Col>
+          <Col>
+            <FormGroup>
+              <Label for="examplePassword">Password</Label>
+              <Input
+                type="password"
+                name="password"
+                id="examplePassword"
+                placeholder="********"
+                value={input.password}
+                onChange={handleInput}
+              />
+            </FormGroup>
+          </Col>
+          <Button onClick={login}>Submit</Button>
+
+          <div
+            className="exists"
+            style={exists ? { height: "24px" } : { height: "0" }}
+          >
+            User exists in the database!
           </div>
-          {exists ? <div className="exists">This user exists!</div> : null}
-          <button onClick={login}>Log In</button>
-          ^not working on heroku due to CORS error^
-        </div>
+        </Form>
       </div>
-      <div
-        className="expand"
-        onClick={() => {
-          setExpanded(!expanded);
-        }}
-      >
-        Expand To See Users
-      </div>
-      <ul style={expanded ? { height: "150px" } : { height: "0px" }}>
-        {users.map((user, key) => {
-          return (
-            <li key={key}>
-              {user.firstName} {user.lastName} | {user.username}:{user.password}
-            </li>
-          );
-        })}
-      </ul>
-    </header>
+    </div>
   );
 };
 

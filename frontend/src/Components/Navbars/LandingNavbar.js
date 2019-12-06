@@ -9,7 +9,7 @@ const LandingNavbar = () => {
 
   const [isOpen, setIsOpen] = useState(false);
 
-  const handleCollapse = () => setIsOpen(!isOpen);
+  const handleCollapseClose = () => setIsOpen(false);
 
   const listenScrollEvent = e => {
     if (window.scrollY > 275) {
@@ -28,23 +28,24 @@ const LandingNavbar = () => {
 
   const itemsMarkup = (
     <div className="LandingNavbar-Items">
-      <div className="LandingNavbar-Item">
+      <div className="LandingNavbar-Item" onClick={handleCollapseClose}>
         <Link to="/">Home</Link>
       </div>
-      <div className="LandingNavbar-Item" onClick={handleCollapse}>
+      <div className="LandingNavbar-Item" onClick={handleCollapseClose}>
         <a
           href="https://github.com/tradoncic1/web-engineering-project"
           target="_blank"
+          rel="noopener noreferrer"
         >
           github
         </a>
       </div>
-      <div className="LandingNavbar-Item" onClick={handleCollapse}>
+      <div className="LandingNavbar-Item" onClick={handleCollapseClose}>
         <Link to="/login">Log In</Link>
       </div>
       <div
         className="LandingNavbar-Item LandingNavbar-Register"
-        onClick={handleCollapse}
+        onClick={handleCollapseClose}
       >
         <Link to="/">Register</Link>
       </div>
@@ -61,11 +62,9 @@ const LandingNavbar = () => {
           <Link to="/">TrackR</Link>
         </div>
         <div className="LandingNavbar-Collapsable">
-          <isOpen
+          <i
             className="LandingNavbar-Collapsable--Icon fas fa-bars"
-            onClick={() => {
-              setIsOpen(!isOpen);
-            }}
+            onClick={() => setIsOpen(!isOpen)}
           />
         </div>
         {itemsMarkup}
