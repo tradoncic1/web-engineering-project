@@ -1,0 +1,88 @@
+.App {
+  text-align: center;
+}
+
+.App-header {
+  background-color: #282c34;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  font-size: calc(10px + 2vmin);
+  color: white;
+}
+
+li {
+  list-style-type: none;
+}
+
+.form-wrap {
+  width: 50%;
+  height: 320px;
+  display: flex;
+  justify-content: center;
+  background: white;
+  padding: 16px 0;
+  border-radius: 4px 4px 0 0;
+}
+
+.form {
+  width: 75%;
+  div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+label {
+  align-self: flex-start;
+  color: #282c34;
+}
+
+input {
+  height: 32px;
+  border: 1px solid #282c34;
+  border-radius: 4px;
+}
+
+button {
+  border: none;
+  width: 100%;
+  border-radius: 4px;
+  background: rgb(138, 74, 138);
+  height: 48px;
+  color: white;
+  justify-self: flex-end;
+  font-family: "Roboto", sans-serif;
+  font-size: 24px;
+  margin-top: 32px;
+
+  &:hover {
+    background: rgb(99, 54, 99);
+  }
+}
+
+.expand {
+  background: lightblue;
+  width: 50%;
+  border-radius: 0 0 4px 4px;
+  color: #282c34;
+  cursor: pointer;
+
+  &:hover {
+    background: rgb(148, 185, 197);
+  }
+}
+
+ul {
+  overflow: hidden;
+  transition: height 0.35s ease;
+}
+
+.exists {
+  color: black;
+  font-size: 16px;
+  margin-top: 8px;
+}

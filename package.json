@@ -23,5 +23,6 @@
   "homepage": "https://github.com/tradoncic1/web-engineering-project#readme",
   "devDependencies": {
     "concurrently": "^5.0.0"
-  }
+  },
+  "dependencies": {}
 }
