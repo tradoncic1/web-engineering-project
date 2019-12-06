@@ -1,0 +1,100 @@
+.LandingNavbar-Wrapper {
+  width: 100%;
+  position: fixed;
+  transition: background-color 0.45s ease;
+  display: flex;
+  flex-direction: column;
+  color: white;
+  padding-right: 15px;
+  //background: rgb(111, 175, 175);
+}
+
+.LandingNavbar {
+  min-height: 75px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.LandingNavbar-Items {
+  display: none;
+  flex-direction: row;
+}
+
+.LandingNavbar-Collapsable {
+  margin-right: 25px;
+  padding: 10px;
+}
+
+.LandingNavbar-Collapsable--Icon {
+  font-size: 24px;
+  border: 1px solid white;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.LandingNavbar-Collapsable--Content {
+  width: 100%;
+  height: 75px;
+  padding-top: 15px;
+
+  .LandingNavbar-Items {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+  }
+}
+
+.LandingNavbar-Item {
+  font-size: medium;
+  margin: 0 5px;
+
+  > a {
+    color: white;
+    text-decoration: none;
+    padding: 15px;
+    border-radius: 4px;
+    transition: background 0.25s ease;
+    outline: none;
+    &:hover {
+      background: rgba(211, 211, 211, 0.425);
+    }
+  }
+}
+
+.LandingNavbar-Register {
+  > a {
+    background: white;
+    color: black;
+
+    &:hover {
+      opacity: 0.75;
+      background: none;
+      color: white;
+      box-shadow: 0 0 0 2px white inset;
+    }
+  }
+}
+
+.LandingNavbar-Home {
+  font-size: 24px;
+  margin-left: 25px;
+
+  > a {
+    outline: none;
+    color: white;
+    text-decoration: none;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .LandingNavbar-Collapsable--Icon {
+    display: none;
+    width: fit-content;
+  }
+
+  .LandingNavbar-Items {
+    display: flex;
+  }
+}

@@ -1,0 +1,53 @@
+.Landing-Wrapper {
+  height: 1500px;
+  background: rgb(90, 62, 194);
+  color: white;
+}
+
+.Landing-Welcome {
+  height: 100vh;
+  background: rgb(90, 62, 194);
+  background: linear-gradient(
+    351deg,
+    rgba(90, 62, 194, 1) 35%,
+    rgba(2, 0, 36, 1) 35%
+  );
+}
+
+.Landing-Body {
+  background: rgba(90, 62, 194, 1);
+  padding: 25px;
+}
+
+.Landing-Footer {
+  height: 75vh;
+  background: rgba(2, 0, 36, 1) 35%;
+  background: linear-gradient(
+    351deg,
+    rgba(2, 0, 36, 1) 35%,
+    rgba(90, 62, 194, 1) 35%
+  );
+}
+
+.Landing-Title {
+  font-size: 86px;
+  position: absolute;
+  top: calc(50vh - 128px);
+  right: 10%;
+}
+
+.Landing-Body--Text {
+  display: grid;
+  grid-template-columns: 1fr 2fr;
+
+  > p {
+    margin: 15px;
+  }
+}
+
+@media screen and (min-width: 768px) {
+  .Landing-Title {
+    font-size: 128px;
+    right: 15%;
+  }
+}

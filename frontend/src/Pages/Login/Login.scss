@@ -1,0 +1,57 @@
+li {
+  list-style-type: none;
+}
+
+.form-wrap {
+  width: 50%;
+  height: 320px;
+  display: flex;
+  justify-content: center;
+  background: white;
+  padding: 16px 0;
+  border-radius: 4px 4px 0 0;
+}
+
+.form {
+  width: 75%;
+  div {
+    display: flex;
+    flex-direction: column;
+    width: 100%;
+  }
+}
+
+label {
+  align-self: flex-start;
+  color: #282c34;
+}
+
+input {
+  height: 32px;
+  border: 1px solid #282c34;
+  border-radius: 4px;
+}
+
+.expand {
+  background: lightblue;
+  width: 50%;
+  border-radius: 0 0 4px 4px;
+  color: #282c34;
+  cursor: pointer;
+
+  &:hover {
+    background: rgb(148, 185, 197);
+  }
+}
+
+ul {
+  overflow: hidden;
+  transition: height 0.35s ease;
+  color: white;
+}
+
+.exists {
+  color: black;
+  font-size: 16px;
+  margin-top: 8px;
+}
