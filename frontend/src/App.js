@@ -76,6 +76,7 @@ const App = () => {
             </div>
             {exists ? <div className="exists">This user exists!</div> : null}
             <button onClick={login}>Log In</button>
+            ^not working on heroku due to CORS error^
           </div>
         </div>
         <div

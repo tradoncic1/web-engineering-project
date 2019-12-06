@@ -11,6 +11,7 @@
   justify-content: center;
   font-size: calc(10px + 2vmin);
   color: white;
+  color: #282c34;
 }
 
 li {
@@ -79,6 +80,7 @@ button {
 ul {
   overflow: hidden;
   transition: height 0.35s ease;
+  color: white;
 }
 
 .exists {
