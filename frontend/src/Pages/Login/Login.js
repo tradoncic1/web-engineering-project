@@ -1,17 +1,10 @@
-import React, { useState, useEffect } from "react";
-import {
-  FormFeedback,
-  Col,
-  Form,
-  FormGroup,
-  Label,
-  Input,
-  Button
-} from "reactstrap";
+import React, { useState } from "react";
+import { Col, Form, FormGroup, Label, Input, Button } from "reactstrap";
 import { BASE_URL } from "../../utils";
 
 import "./Login.scss";
 import LandingNavbar from "../../Components/Navbars/LandingNavbar";
+import { Link } from "react-router-dom";
 
 const Login = () => {
   const [input, setInput] = useState({
@@ -53,14 +46,15 @@ const Login = () => {
     <div className="Login-Page">
       <LandingNavbar />
       <div className="LoginForm-Wrapper">
+        <h2>login</h2>
         <Form className="form">
           <Col>
             <FormGroup>
-              <Label>Email</Label>
+              <Label for="username">username</Label>
               <Input
                 type="username"
                 name="username"
-                id="exampleUsername"
+                id="username"
                 placeholder="username"
                 value={input.username}
                 onChange={handleInput}
@@ -69,19 +63,27 @@ const Login = () => {
           </Col>
           <Col>
             <FormGroup>
-              <Label for="examplePassword">Password</Label>
+              <Label for="password">password</Label>
               <Input
                 type="password"
                 name="password"
-                id="examplePassword"
+                id="password"
                 placeholder="********"
                 value={input.password}
                 onChange={handleInput}
               />
             </FormGroup>
           </Col>
-          <Button onClick={login}>Submit</Button>
-
+          <Button color="primary" onClick={login}>
+            Submit
+          </Button>
+          <br />
+          <br />
+          <div>
+            Don't have an account?
+            <br />
+            <Link to="/register">Register here!</Link>
+          </div>
           <div
             className="exists"
             style={exists ? { height: "24px" } : { height: "0" }}

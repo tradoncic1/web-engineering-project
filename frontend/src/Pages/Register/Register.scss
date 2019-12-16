@@ -1,4 +1,4 @@
-.Login-Page {
+.Register-Page {
   width: 100vw;
   height: 100vh;
   background: rgb(90, 62, 194);
@@ -9,14 +9,19 @@
   );
 }
 
-.LoginForm-Wrapper {
-  background: white;
-  width: 75%;
+.RegisterForm-Wrapper {
   position: absolute;
-  top: 20%;
+  max-height: 80vh;
+  overflow-y: auto;
+  width: 75%;
+  top: 17.5%;
   left: 12.5%;
+  background: white;
   border-radius: 4px;
-  padding: 25px;
+  padding: 15px 25px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 
   .form-group {
     text-align: left;
@@ -28,14 +33,9 @@
   }
 }
 
-.exists {
-  transition: height 0.25s ease;
-  overflow: hidden;
-}
-
 @media screen and (min-width: 768px) {
-  .LoginForm-Wrapper {
-    left: 25%;
+  .RegisterForm-Wrapper {
     width: 50%;
+    left: 25%;
   }
 }

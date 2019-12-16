@@ -13,7 +13,7 @@ const LandingNavbar = () => {
 
   const listenScrollEvent = e => {
     if (window.scrollY > 275) {
-      setNavColor("rgba(128, 202, 202, 0.9)");
+      setNavColor("rgba(31, 16, 247, 0.65)");
     } else {
       setNavColor("");
     }
@@ -47,7 +47,7 @@ const LandingNavbar = () => {
         className="LandingNavbar-Item LandingNavbar-Register"
         onClick={handleCollapseClose}
       >
-        <Link to="/">Register</Link>
+        <Link to="/register">Register</Link>
       </div>
     </div>
   );

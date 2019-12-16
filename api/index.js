@@ -184,8 +184,8 @@ app.post("/register", async (req, res) => {
             username: req.body.username,
             password: req.body.password,
             firstName: req.body.firstName,
-            role: 4,
-            lastName: req.body.lastName
+            lastName: req.body.lastName,
+            role: req.body.role
           },
           (error, response) => {
             if (error) {

@@ -6,6 +6,7 @@
   flex-direction: column;
   color: white;
   padding-right: 15px;
+  z-index: 9999;
   //background: rgb(111, 175, 175);
 }
 
@@ -35,9 +36,10 @@
 }
 
 .LandingNavbar-Collapsable--Content {
-  width: 100%;
+  width: 100vw;
   height: 75px;
-  padding-top: 15px;
+  padding-top: 25px;
+  background-color: rgba(31, 16, 247, 0.3);
 
   .LandingNavbar-Items {
     display: flex;
