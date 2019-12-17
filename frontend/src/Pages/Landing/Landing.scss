@@ -1,31 +1,31 @@
 .Landing-Wrapper {
-  height: 1500px;
-  background: rgba(2, 0, 36, 1);
+  background-image: url("https://free4kwallpapers.com/uploads/originals/2016/05/12/yosemite-national-park-yosemite-valley-wallpaper.jpg");
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
   color: white;
 }
 
 .Landing-Welcome {
   height: 100vh;
-  background: rgb(90, 62, 194);
   background: linear-gradient(
     351deg,
-    rgba(90, 62, 194, 1) 35%,
-    rgba(2, 0, 36, 1) 35%
+    rgba(90, 62, 194, 0.9) 35%,
+    rgba(2, 0, 36, 0.5) 35%
   );
 }
 
 .Landing-Body {
-  background: rgba(90, 62, 194, 1);
+  background: rgba(90, 62, 194, 0.9);
   padding: 25px;
 }
 
 .Landing-Footer {
   height: 75vh;
-  background: rgba(90, 62, 194, 1);
   background: linear-gradient(
     351deg,
-    rgba(2, 0, 36, 1) 45%,
-    rgba(90, 62, 194, 1) 45%
+    rgba(2, 0, 36, 0.5) 45%,
+    rgba(90, 62, 194, 0.9) 45%
   );
 }
 

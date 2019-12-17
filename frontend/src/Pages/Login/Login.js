@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Col, Form, FormGroup, Label, Input, Button } from "reactstrap";
-import { BASE_URL } from "../../utils";
+import { Link } from "react-router-dom";
+import LandingNavbar from "../../Components/Navbars/LandingNavbar";
+import { users, auth } from "../../api/index";
 
 import "./Login.scss";
-import LandingNavbar from "../../Components/Navbars/LandingNavbar";
-import { Link } from "react-router-dom";
 
 const Login = () => {
   const [input, setInput] = useState({
@@ -20,26 +20,11 @@ const Login = () => {
     });
   };
 
-  const login = async () => {
-    try {
-      setExists(false);
-      const loginResponse = await fetch(`${BASE_URL}/login`, {
-        method: "POST",
-        headers: {
-          Accept: "application/json",
-          "Content-Type": "application/json"
-        },
-        body: JSON.stringify({
-          username: input.username,
-          password: input.password
-        })
-      });
-      const content = await loginResponse.json();
-      setExists(true);
-      console.log(content);
-    } catch (error) {
-      console.log(error);
-    }
+  const handleSubmit = async e => {
+    e.preventDefault();
+
+    const loginResponse = await auth.login(input);
+    console.log(loginResponse.data);
   };
 
   return (
@@ -47,7 +32,7 @@ const Login = () => {
       <LandingNavbar />
       <div className="LoginForm-Wrapper">
         <h2>login</h2>
-        <Form className="form">
+        <Form className="form" onSubmit={handleSubmit}>
           <Col>
             <FormGroup>
               <Label for="username">username</Label>
@@ -74,7 +59,7 @@ const Login = () => {
               />
             </FormGroup>
           </Col>
-          <Button color="primary" onClick={login}>
+          <Button type="submit" onClick={handleSubmit} color="primary">
             Submit
           </Button>
           <br />

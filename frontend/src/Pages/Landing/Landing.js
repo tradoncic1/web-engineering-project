@@ -1,9 +1,16 @@
-import React from "react";
+import React, { useEffect } from "react";
+import axios from "axios";
 import LandingNavbar from "../../Components/Navbars/LandingNavbar";
 
 import "./Landing.scss";
+import { BASE_URL } from "../../utils";
 
 const Landing = () => {
+  useEffect(() => {
+    axios.get(`${BASE_URL}/users`).then(response => {
+      console.log(response.data);
+    });
+  });
   return (
     <div className="Landing-Wrapper">
       <LandingNavbar />

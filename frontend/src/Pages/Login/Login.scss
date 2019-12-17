@@ -1,16 +1,25 @@
 .Login-Page {
   width: 100vw;
   height: 100vh;
-  background: rgb(90, 62, 194);
   background: linear-gradient(
     351deg,
-    rgba(90, 62, 194, 1) 35%,
+    rgba(90, 62, 194, 0.9) 35%,
     rgba(2, 0, 36, 1) 35%
   );
+  background-image: url("https://cdn.pixabay.com/photo/2018/01/22/18/48/statue-3099675_960_720.png"),
+    linear-gradient(
+      351deg,
+      rgba(90, 62, 194, 0.9) 35%,
+      rgba(27, 24, 100, 0.616) 35%
+    ); /* W3C */
+  background-repeat: no-repeat;
+  background-size: cover;
+  background-attachment: fixed;
+  background-repeat: no-repeat;
 }
 
 .LoginForm-Wrapper {
-  background: white;
+  background: rgba(255, 255, 255, 0.9);
   width: 75%;
   position: absolute;
   top: 20%;

@@ -1,6 +1,9 @@
 const express = require("express");
 const app = express();
 
+const cors = require("cors");
+app.use(cors());
+
 const port = process.env.PORT || 5000;
 
 let config;
@@ -57,12 +60,12 @@ app.use("/company", company_router);
 //tickets router setup
 let tickets_router = express.Router();
 require("./routes/tickets")(tickets_router, db, mongojs, jwt, config);
-app.use("./tickets", tickets_router);
+app.use("/tickets", tickets_router);
 
 //users router setup
 let users_router = express.Router();
 require("./routes/users")(users_router, db, mongojs, jwt, config);
-app.use("./users", users_router);
+app.use("/users", users_router);
 
 /** Swagger setup */
 const swaggerDefinition = {
@@ -104,7 +107,7 @@ app.get("/users", (req, res) => {
 
 /**
  * @swagger
- * /login:
+ * /authenticate:
  *   post:
  *     tags:
  *       - auth
@@ -139,7 +142,7 @@ app.get("/users", (req, res) => {
  *       500:
  *         description: Something is wrong with the service. Please contact the system administrator.
  */
-app.post("/login", async (req, res) => {
+app.post("/authenticate", async (req, res) => {
   console.log("Login route");
 
   try {

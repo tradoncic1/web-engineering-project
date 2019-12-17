@@ -9,4 +9,11 @@ const getBaseUrl = () => {
   return baseUrl;
 };
 
+export const getHeaders = () => {
+  return {
+    auth: localStorage.getItem("access_token"),
+    "Content-Type": "application/json"
+  };
+};
+
 export const BASE_URL = getBaseUrl();
