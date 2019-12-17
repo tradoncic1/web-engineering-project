@@ -5,7 +5,7 @@ const getBaseUrl = () => {
   if (baseUrl.includes("localhost")) {
     baseUrl = "http://localhost:5000";
   }
-  console.log(baseUrl);
+  console.log(baseUrl, baseUrl.substring(0, baseUrl.length - 1));
   return baseUrl;
 };
 
