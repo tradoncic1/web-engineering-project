@@ -4,8 +4,10 @@ const getBaseUrl = () => {
     getUrl.protocol + "//" + getUrl.host + "/" + getUrl.pathname.split("/")[1];
   if (baseUrl.includes("localhost")) {
     baseUrl = "http://localhost:5000";
+  } else {
+    baseUrl = baseUrl.substring(0, baseUrl.length - 1);
   }
-  console.log(baseUrl, baseUrl.substring(0, baseUrl.length - 1));
+  // console.log(baseUrl);
   return baseUrl;
 };
 
