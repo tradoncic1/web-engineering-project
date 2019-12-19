@@ -171,7 +171,7 @@ app.post("/authenticate", async (req, res) => {
 });
 
 //register call
-app.post("/register", async (req, res) => {
+app.post("/registration", async (req, res) => {
   console.log("Register route");
 
   try {
@@ -188,6 +188,7 @@ app.post("/register", async (req, res) => {
             password: req.body.password,
             firstName: req.body.firstName,
             lastName: req.body.lastName,
+            email: req.body.email,
             role: req.body.role
           },
           (error, response) => {

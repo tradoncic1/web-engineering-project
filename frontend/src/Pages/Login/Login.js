@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Col, Form, FormGroup, Label, Input, Button } from "reactstrap";
 import { Link } from "react-router-dom";
 import LandingNavbar from "../../Components/Navbars/LandingNavbar";
-import { users, auth } from "../../api/index";
+import { auth } from "../../api/index";
 
 import "./Login.scss";
 
@@ -11,7 +11,6 @@ const Login = () => {
     username: "",
     password: ""
   });
-  const [exists, setExists] = useState(false);
 
   const handleInput = event => {
     setInput({
@@ -68,12 +67,6 @@ const Login = () => {
             Don't have an account?
             <br />
             <Link to="/register">Register here!</Link>
-          </div>
-          <div
-            className="exists"
-            style={exists ? { height: "24px" } : { height: "0" }}
-          >
-            User exists in the database!
           </div>
         </Form>
       </div>

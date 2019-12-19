@@ -16,6 +16,10 @@
   background-size: cover;
   background-attachment: fixed;
   background-repeat: no-repeat;
+
+  .btn {
+    justify-self: flex-end;
+  }
 }
 
 .LoginForm-Wrapper {
@@ -35,11 +39,6 @@
     text-align: left;
     border-bottom: 1px solid lightblue;
   }
-}
-
-.exists {
-  transition: height 0.25s ease;
-  overflow: hidden;
 }
 
 @media screen and (min-width: 768px) {
