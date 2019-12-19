@@ -5,15 +5,16 @@ import { Link } from "react-router-dom";
 import "./LandingNavbar.scss";
 
 const LandingNavbar = () => {
-  const [navColor, setNavColor] = useState("");
+  const NAV_COL = "rgba(31, 16, 247, 0.65)";
 
+  const [navColor, setNavColor] = useState("");
   const [isOpen, setIsOpen] = useState(false);
 
   const handleCollapseClose = () => setIsOpen(false);
 
   const listenScrollEvent = e => {
     if (window.scrollY > 275) {
-      setNavColor("rgba(31, 16, 247, 0.65)");
+      setNavColor(NAV_COL);
     } else {
       setNavColor("");
     }
@@ -64,9 +65,18 @@ const LandingNavbar = () => {
         <div className="LandingNavbar-Collapsable">
           <i
             className="LandingNavbar-Collapsable--Icon fas fa-bars"
-            onClick={() => setIsOpen(!isOpen)}
+            onClick={() => {
+              setIsOpen(!isOpen);
+              window.scrollY < 275 && isOpen
+                ? setNavColor("")
+                : setNavColor(NAV_COL);
+            }}
           />
         </div>
+        <div
+          className="LandingNavbar-Divider"
+          style={{ width: isOpen ? "100%" : "0" }}
+        />
         {itemsMarkup}
       </div>
       <Collapse isOpen={isOpen}>

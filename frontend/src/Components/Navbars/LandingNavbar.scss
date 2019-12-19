@@ -7,7 +7,6 @@
   color: white;
   padding-right: 15px;
   z-index: 9999;
-  //background: rgb(111, 175, 175);
 }
 
 .LandingNavbar {
@@ -39,7 +38,6 @@
   width: 100vw;
   height: 75px;
   padding-top: 25px;
-  background-color: rgba(31, 16, 247, 0.3);
 
   .LandingNavbar-Items {
     display: flex;
@@ -90,10 +88,24 @@
   }
 }
 
+.LandingNavbar-Divider {
+  height: 2px;
+  //width: 90%;
+  justify-self: center;
+  background-color: white;
+  position: absolute;
+  top: 75px;
+  transition: width 0.25s ease;
+}
+
 @media screen and (min-width: 768px) {
   .LandingNavbar-Collapsable--Icon {
     display: none;
     width: fit-content;
+  }
+
+  .LandingNavbar-Divider {
+    display: none;
   }
 
   .LandingNavbar-Items {

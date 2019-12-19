@@ -1,8 +1,4 @@
 .Landing-Wrapper {
-  background-image: url("https://free4kwallpapers.com/uploads/originals/2016/05/12/yosemite-national-park-yosemite-valley-wallpaper.jpg");
-  background-size: cover;
-  background-attachment: fixed;
-  background-repeat: no-repeat;
   color: white;
 }
 
@@ -10,13 +6,13 @@
   height: 100vh;
   background: linear-gradient(
     351deg,
-    rgba(90, 62, 194, 0.9) 35%,
-    rgba(2, 0, 36, 0.5) 35%
+    rgba(90, 62, 194, 0.8) 35%,
+    rgba(2, 0, 36, 1) 35%
   );
 }
 
 .Landing-Body {
-  background: rgba(90, 62, 194, 0.9);
+  background: rgba(90, 62, 194, 0.8);
   padding: 25px;
 }
 
@@ -24,8 +20,8 @@
   height: 75vh;
   background: linear-gradient(
     351deg,
-    rgba(2, 0, 36, 0.5) 45%,
-    rgba(90, 62, 194, 0.9) 45%
+    rgba(2, 0, 36, 1) 45%,
+    rgba(90, 62, 194, 0.8) 45%
   );
 }
 
@@ -46,6 +42,13 @@
 }
 
 @media screen and (min-width: 768px) {
+  .Landing-Wrapper {
+    background-image: url("https://free4kwallpapers.com/uploads/originals/2016/05/12/yosemite-national-park-yosemite-valley-wallpaper.jpg");
+    background-size: cover;
+    background-attachment: fixed;
+    background-repeat: no-repeat;
+  }
+
   .Landing-Title {
     font-size: 128px;
     right: 15%;
