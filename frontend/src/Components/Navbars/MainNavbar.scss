@@ -1,0 +1,116 @@
+.MainNavbar-Wrapper {
+  width: 100%;
+  position: fixed;
+  transition: background-color 0.45s ease;
+  display: flex;
+  background-color: lightskyblue;
+  flex-direction: column;
+  color: white;
+  padding-right: 15px;
+  z-index: 650;
+}
+
+.MainNavbar {
+  height: 75px;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.MainNavbar-Items {
+  display: none;
+  flex-direction: row;
+}
+
+.MainNavbar-Collapsable {
+  margin-right: 25px;
+  padding: 10px;
+}
+
+.MainNavbar-Collapsable--Icon {
+  font-size: 24px;
+  border: 1px solid white;
+  border-radius: 4px;
+  padding: 5px;
+}
+
+.MainNavbar-Collapsable--Content {
+  width: 100vw;
+  height: 75px;
+  padding-top: 25px;
+
+  .MainNavbar-Items {
+    display: flex;
+    width: 100%;
+    justify-content: space-evenly;
+  }
+}
+
+.MainNavbar-Item {
+  font-size: medium;
+  margin: 0 5px;
+
+  > a {
+    color: white;
+    text-decoration: none;
+    padding: 15px;
+    border-radius: 4px;
+    transition: all 0.25s ease;
+    outline: none;
+    &:hover {
+      background: rgba(255, 255, 255, 0.15);
+      box-shadow: 0 0 0 2px white inset;
+    }
+  }
+}
+
+.MainNavbar-Logout {
+  > a {
+    background: white;
+    color: black;
+
+    &:hover {
+      opacity: 0.75;
+      background: none;
+      color: white;
+      box-shadow: 0 0 0 2px white inset;
+    }
+  }
+}
+
+.MainNavbar-Home {
+  font-size: 24px;
+  margin-left: 25px;
+
+  > a {
+    outline: none;
+    color: white;
+    text-decoration: none;
+  }
+}
+
+.MainNavbar-Divider {
+  height: 2px;
+  //width: 90%;
+  justify-self: center;
+  background-color: white;
+  position: absolute;
+  top: 75px;
+  transition: width 0.25s ease;
+}
+
+@media screen and (min-width: 768px) {
+  .MainNavbar-Collapsable--Icon {
+    display: none;
+    width: fit-content;
+  }
+
+  .MainNavbar-Divider {
+    display: none;
+  }
+
+  .MainNavbar-Items {
+    display: flex;
+  }
+}

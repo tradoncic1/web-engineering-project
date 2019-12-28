@@ -3,6 +3,8 @@ import { withRouter } from "react-router";
 import { parseJwt } from "../../utils";
 import "./Home.scss";
 import { users } from "../../api";
+import MainNavbar from "../../Components/Navbars/MainNavbar";
+import { Row, Col } from "reactstrap";
 
 const Home = props => {
   const [profileInfo, setProfileInfo] = useState({});
@@ -27,7 +29,19 @@ const Home = props => {
     }
   }, [props.match.params.username]);
 
-  return <div className="Home-Wrapper"></div>;
+  return (
+    <div className="Home-Page">
+      <MainNavbar />
+      <div className="Home-Wrapper">
+        <Row className="Home-Header">
+          <span>{profileInfo.username}</span>
+          <span>
+            {profileInfo.firstName} {profileInfo.lastName}
+          </span>
+        </Row>
+      </div>
+    </div>
+  );
 };
 
 export default withRouter(Home);

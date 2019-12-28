@@ -12,6 +12,7 @@ import { Link, withRouter } from "react-router-dom";
 import { auth } from "../../api/index";
 
 import "./Login.scss";
+import LandingNavbar from "../../Components/Navbars/LandingNavbar";
 
 const Login = props => {
   const [input, setInput] = useState({
@@ -62,6 +63,7 @@ const Login = props => {
 
   return (
     <div className="Login-Page">
+      <LandingNavbar />
       <div className="LoginForm-Wrapper">
         <h2>login</h2>
         <Form className="form" onSubmit={handleSubmit}>

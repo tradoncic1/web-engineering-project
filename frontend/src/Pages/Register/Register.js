@@ -15,6 +15,7 @@ import { withRouter } from "react-router-dom";
 import { auth } from "../../api";
 import { toast } from "react-toastify";
 import "./Register.scss";
+import LandingNavbar from "../../Components/Navbars/LandingNavbar";
 
 const Register = props => {
   const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -100,6 +101,7 @@ const Register = props => {
 
   return (
     <div className="Register-Page">
+      <LandingNavbar />
       <div className="RegisterForm-Wrapper">
         <h2>register</h2>
         <Form className="form" onSubmit={handleSubmit}>

@@ -8,13 +8,13 @@ import Login from "./Pages/Login/Login";
 import Home from "./Pages/Home/Home";
 import "./App.scss";
 import LandingNavbar from "./Components/Navbars/LandingNavbar";
+import MainNavbar from "./Components/Navbars/MainNavbar";
 
 const App = () => {
   return (
     <div className="App">
       <ToastContainer />
       <Router>
-        <LandingNavbar />
         <Switch>
           <Route exact path="/" component={Landing} />
           <Route exact path="/login" component={Login} />
