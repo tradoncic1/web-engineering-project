@@ -7,11 +7,11 @@ import {
   ModalFooter,
   Button
 } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 import "./MainNavbar.scss";
 
-const MainNavbar = () => {
+const MainNavbar = props => {
   const [isOpen, setIsOpen] = useState(false);
   const [logoutModalShow, setLogoutModalShow] = useState(false);
 
@@ -20,6 +20,7 @@ const MainNavbar = () => {
   const logout = () => {
     setLogoutModalShow(!logoutModalShow);
     localStorage.removeItem("jwt");
+    props.history.push("/");
     window.location.reload();
   };
 
@@ -102,4 +103,4 @@ const MainNavbar = () => {
   );
 };
 
-export default MainNavbar;
+export default withRouter(MainNavbar);
