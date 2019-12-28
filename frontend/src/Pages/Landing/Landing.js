@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import axios from "axios";
-import LandingNavbar from "../../Components/Navbars/LandingNavbar";
 
 import "./Landing.scss";
 import { BASE_URL } from "../../utils";
@@ -13,7 +12,6 @@ const Landing = () => {
   });
   return (
     <div className="Landing-Wrapper">
-      <LandingNavbar />
       <div className="Landing-Welcome">
         <div className="Landing-Title">TrackR</div>
       </div>

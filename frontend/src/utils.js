@@ -1,3 +1,6 @@
+import React from "react";
+import { Redirect } from "react-router";
+
 const getBaseUrl = () => {
   var getUrl = window.location;
   var baseUrl =
@@ -5,7 +8,7 @@ const getBaseUrl = () => {
   if (baseUrl.includes("localhost")) {
     baseUrl = "http://localhost:5000";
   } else {
-    baseUrl = baseUrl.substring(0, baseUrl.length - 1);
+    baseUrl = getUrl.protocol + "//" + getUrl.host;
   }
   // console.log(baseUrl);
   return baseUrl;
@@ -13,9 +16,24 @@ const getBaseUrl = () => {
 
 export const getHeaders = () => {
   return {
-    auth: localStorage.getItem("access_token"),
+    auth: localStorage.getItem("jwt"),
     "Content-Type": "application/json"
   };
+};
+
+export const parseJwt = token => {
+  var base64Url = token.split(".")[1];
+  var base64 = base64Url.replace(/-/g, "+").replace(/_/g, "/");
+  var jsonPayload = decodeURIComponent(
+    atob(base64)
+      .split("")
+      .map(function(c) {
+        return "%" + ("00" + c.charCodeAt(0).toString(16)).slice(-2);
+      })
+      .join("")
+  );
+
+  return JSON.parse(jsonPayload);
 };
 
 export const BASE_URL = getBaseUrl();

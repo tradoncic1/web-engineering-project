@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { Link } from "react-router-dom";
 import {
   Button,
   Form,
@@ -12,10 +12,9 @@ import {
   FormText
 } from "reactstrap";
 import { withRouter } from "react-router-dom";
-
-import "./Register.scss";
-import LandingNavbar from "../../Components/Navbars/LandingNavbar";
 import { auth } from "../../api";
+import { toast } from "react-toastify";
+import "./Register.scss";
 
 const Register = props => {
   const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -38,6 +37,12 @@ const Register = props => {
   });
 
   const { username, email, password, firstName, lastName, role } = input;
+
+  useEffect(() => {
+    if (localStorage.getItem("jwt")) {
+      props.history.push("/home");
+    }
+  }, []);
 
   const handleInput = event => {
     // event.preventDefault();
@@ -77,17 +82,24 @@ const Register = props => {
         role: true
       });
 
-      auth.registration(input);
-
-      setTimeout(() => {
-        props.history.push("/login");
-      }, 1250);
+      await auth
+        .registration(input)
+        .then(res => props.history.push("/login"))
+        .catch(error => {
+          toast.warn("That username is already taken!", {
+            position: "top-right",
+            autoClose: 5000,
+            hideProgressBar: true,
+            closeOnClick: true,
+            pauseOnHover: true,
+            draggable: true
+          });
+        });
     }
   };
 
   return (
     <div className="Register-Page">
-      <LandingNavbar />
       <div className="RegisterForm-Wrapper">
         <h2>register</h2>
         <Form className="form" onSubmit={handleSubmit}>
@@ -187,7 +199,7 @@ const Register = props => {
                   type="radio"
                   name="role"
                   onChange={handleInput}
-                  checked={role == "4"}
+                  checked={role === "4"}
                 />{" "}
                 Individual
               </Label>
@@ -199,7 +211,7 @@ const Register = props => {
                   type="radio"
                   name="role"
                   onChange={handleInput}
-                  checked={role == "1"}
+                  checked={role === "1"}
                 />{" "}
                 Company
               </Label>
@@ -219,4 +231,4 @@ const Register = props => {
   );
 };
 
-export default Register;
+export default withRouter(Register);

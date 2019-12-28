@@ -147,24 +147,23 @@ app.post("/authenticate", async (req, res) => {
 
   try {
     let jwtToken;
-    await db.users.findOne(
-      { username: req.body.username, password: req.body.password },
-      (err, doc) => {
-        if (!doc) {
-          return res.status(404).send("Login failed! Wrong credentials");
-        }
-        jwtToken = jwt.sign(
-          {
-            username: doc.username,
-            role: doc.role,
-            exp: Math.floor(Date.now() / 1000) + 3600 // token which lasts for an hour
-          },
-          process.env.JWT_SECRET || config.JWT_SECRET
-        );
-
-        res.send({ user: doc, jwt: jwtToken });
+    await db.users.findOne({ username: req.body.username }, (err, doc) => {
+      if (!doc) {
+        return res.status(403).send({ message: "username" });
+      } else if (doc.password != req.body.password) {
+        return res.status(403).send({ message: "password" });
       }
-    );
+      jwtToken = jwt.sign(
+        {
+          username: doc.username,
+          role: doc.role,
+          exp: Math.floor(Date.now() / 1000) + 3600 // token which lasts for an hour
+        },
+        process.env.JWT_SECRET || config.JWT_SECRET
+      );
+
+      res.send({ user: doc, jwt: jwtToken });
+    });
   } catch (error) {
     res.status(400).send(error);
   }
