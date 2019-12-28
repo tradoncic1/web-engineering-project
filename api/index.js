@@ -24,7 +24,8 @@ app.use(bodyParser.json());
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 
-app.use("/", express.static("./../frontend/build"));
+app.use("/", express.static("../frontend/build"));
+app.use(express.static(__dirname + "/public"));
 
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
