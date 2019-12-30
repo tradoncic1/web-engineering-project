@@ -66,9 +66,9 @@ require("./routes/company.js")(company_router, db, mongojs, jwt, config);
 app.use("/company", company_router);
 
 //tickets router setup
-let tickets_router = express.Router();
-require("./routes/tickets")(tickets_router, db, mongojs, jwt, config);
-app.use("/tickets", tickets_router);
+let tasks_router = express.Router();
+require("./routes/tasks")(tasks_router, db, mongojs, jwt, config);
+app.use("/tasks", tasks_router);
 
 //users router setup
 let users_router = express.Router();
@@ -167,8 +167,11 @@ app.post("/authenticate", async (req, res) => {
           role: doc.role,
           exp: Math.floor(Date.now() / 1000) + 3600 // token which lasts for an hour
         },
-        process.env.JWT_SECRET || config.JWT_SECRET
+        process.env.JWT_SECRET || config.JWT_SECRET,
+        { algorithm: "HS256" }
       );
+
+      console.log(jwtToken);
 
       res.send({ user: doc, jwt: jwtToken });
     });

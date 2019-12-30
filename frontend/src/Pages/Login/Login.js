@@ -49,11 +49,13 @@ const Login = props => {
         props.history.push("/home");
       })
       .catch(error => {
-        if (error.response.status === 403) {
-          if (error.response.data.message === "username") {
-            setInvalidUsername(true);
-          } else if (error.response.data.message === "password") {
-            setInvalidPassword(true);
+        if (error && error.response) {
+          if (error.response.status === 403) {
+            if (error.response.data.message === "username") {
+              setInvalidUsername(true);
+            } else if (error.response.data.message === "password") {
+              setInvalidPassword(true);
+            }
           }
         }
       });
