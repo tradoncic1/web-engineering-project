@@ -1,15 +1,14 @@
 import React, { useEffect } from "react";
-import axios from "axios";
-
-import "./Landing.scss";
-import { BASE_URL } from "../../utils";
 import LandingNavbar from "../../Components/Navbars/LandingNavbar";
+import "./Landing.scss";
+import { checkToken } from "../../utils";
+import { withRouter } from "react-router";
 
-const Landing = () => {
+const Landing = props => {
   useEffect(() => {
-    axios.get(`${BASE_URL}/users`).then(response => {
-      console.log(response.data);
-    });
+    if (checkToken()) {
+      props.history.push("/home");
+    }
   });
   return (
     <div className="Landing-Wrapper">

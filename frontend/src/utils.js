@@ -36,4 +36,16 @@ export const parseJwt = token => {
   return JSON.parse(jsonPayload);
 };
 
+export const checkToken = () => {
+  if (!localStorage.getItem("jwt")) {
+    return false;
+  } else {
+    if (localStorage.getItem("jwt").exp < Math.floor(Date.now() / 1000)) {
+      localStorage.removeItem("jwt");
+      return false;
+    }
+  }
+  return true;
+};
+
 export const BASE_URL = getBaseUrl();

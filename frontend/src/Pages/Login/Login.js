@@ -13,6 +13,7 @@ import { auth } from "../../api/index";
 
 import "./Login.scss";
 import LandingNavbar from "../../Components/Navbars/LandingNavbar";
+import { checkToken } from "../../utils";
 
 const Login = props => {
   const [input, setInput] = useState({
@@ -25,7 +26,7 @@ const Login = props => {
   const [isMember, setIsMember] = useState(false);
 
   useEffect(() => {
-    if (localStorage.getItem("jwt")) {
+    if (checkToken()) {
       props.history.push("/home");
     }
   }, []);

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { withRouter } from "react-router";
-import { parseJwt } from "../../utils";
+import { parseJwt, checkToken } from "../../utils";
 import "./Home.scss";
 import { users, tasks, company } from "../../api";
 import MainNavbar from "../../Components/Navbars/MainNavbar";
@@ -69,8 +69,8 @@ const Home = props => {
   };
 
   useEffect(async () => {
-    if (!localStorage.getItem("jwt")) {
-      props.history.push("/login");
+    if (!checkToken()) {
+      props.history.push("/");
       window.location.reload();
     } else {
       await fetchProfileData();

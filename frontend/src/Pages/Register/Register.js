@@ -16,6 +16,7 @@ import { auth } from "../../api";
 import { toast } from "react-toastify";
 import "./Register.scss";
 import LandingNavbar from "../../Components/Navbars/LandingNavbar";
+import { checkToken } from "../../utils";
 
 const Register = props => {
   const emailRegex = /^(([^<>()[\]\\.,;:\s@"]+(\.[^<>()[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
@@ -40,7 +41,7 @@ const Register = props => {
   const { username, email, password, firstName, lastName, role } = input;
 
   useEffect(() => {
-    if (localStorage.getItem("jwt")) {
+    if (checkToken()) {
       props.history.push("/home");
     }
   }, []);
