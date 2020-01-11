@@ -1,4 +1,4 @@
-module.exports = (router, db, mongojs, jwt, config) => {
+module.exports = (router, db, mongojs, jwt, config, nodemailer) => {
   router.use((req, res, next) => {
     console.log(`Company route accessed by: ${req.ip}`); // log visits
 
@@ -84,5 +84,72 @@ module.exports = (router, db, mongojs, jwt, config) => {
     db.users.findOne({ username: username }, function(err, docs) {
       res.json(docs);
     });
+  });
+
+  router.post("/members/:username", async (req, res) => {
+    console.log("Create members route");
+
+    try {
+      await db.members.findOne(
+        { username: req.body.username },
+        async (err, docs) => {
+          if (docs != null) {
+            if (docs.email === req.body.email) {
+              return res.status(404).send({ message: "email" });
+            }
+            return res.status(404).send({ message: "username" });
+          }
+
+          let transporter = nodemailer.createTransport({
+            host: "smtp-mail.outlook.com",
+            secureConnection: false,
+            port: 587,
+            auth: {
+              user: config.MAILER_SOURCE,
+              pass: config.MAILER_PWD
+            },
+            tls: {
+              ciphers: "SSLv3"
+            }
+          });
+
+          let mailOptions = {
+            from: config.MAILER_SOURCE,
+            to: req.body.email,
+            subject: "Your TrackR credentials",
+            text: `username: ${req.body.username}\nemail: ${req.body.email}\npassword: ${req.body.password}`
+          };
+
+          await db.members.insert(
+            {
+              username: req.body.username,
+              password: req.body.password,
+              firstName: req.body.firstName,
+              lastName: req.body.lastName,
+              email: req.body.email,
+              role: 2,
+              owner: req.params.username
+            },
+            (error, response) => {
+              if (error) {
+                return res
+                  .status(400)
+                  .send(`Insertion failed! Reason: ${error.errmsg}`);
+              } else {
+                transporter.sendMail(mailOptions, function(error, info) {
+                  if (error) {
+                    console.log(error);
+                  } else {
+                    console.log("Email sent: " + info.response);
+                  }
+                });
+              }
+            }
+          );
+        }
+      );
+    } catch (error) {
+      res.status(400).send(error);
+    }
   });
 };

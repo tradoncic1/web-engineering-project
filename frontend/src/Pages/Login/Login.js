@@ -22,6 +22,7 @@ const Login = props => {
   const [invalidUsername, setInvalidUsername] = useState(false);
   const [invalidPassword, setInvalidPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isMember, setIsMember] = useState(false);
 
   useEffect(() => {
     if (localStorage.getItem("jwt")) {
@@ -42,8 +43,12 @@ const Login = props => {
     setInvalidPassword(false);
     setIsLoading(true);
 
+    let type = "";
+    if (isMember) type = "member";
+    else type = "user";
+
     await auth
-      .login(input)
+      .login(type, input)
       .then(res => {
         localStorage.setItem("jwt", res.data.jwt);
         props.history.push("/home");
@@ -95,6 +100,16 @@ const Login = props => {
               />
             </FormGroup>
           </Col>
+          <FormGroup check>
+            <Label check>
+              <Input
+                type="checkbox"
+                value={isMember}
+                onChange={e => setIsMember(e.target.value)}
+              />
+              Login as Company member
+            </Label>
+          </FormGroup>
           <Button
             disabled={isLoading}
             type="submit"

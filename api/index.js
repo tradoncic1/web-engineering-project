@@ -1,5 +1,6 @@
 const express = require("express");
 const app = express();
+const nodemailer = require("nodemailer");
 
 const cors = require("cors");
 app.use(cors());
@@ -62,7 +63,14 @@ app.use((req, res, next) => {
 
 //company router setup
 let company_router = express.Router();
-require("./routes/company.js")(company_router, db, mongojs, jwt, config);
+require("./routes/company.js")(
+  company_router,
+  db,
+  mongojs,
+  jwt,
+  config,
+  nodemailer
+);
 app.use("/company", company_router);
 
 //tickets router setup
@@ -150,31 +158,60 @@ app.get("/users", (req, res) => {
  *       500:
  *         description: Something is wrong with the service. Please contact the system administrator.
  */
-app.post("/authenticate", async (req, res) => {
+app.post("/authenticate/:type", async (req, res) => {
   console.log("Login route");
 
   try {
     let jwtToken;
-    await db.users.findOne({ username: req.body.username }, (err, doc) => {
-      if (!doc) {
-        return res.status(403).send({ message: "username" });
-      } else if (doc.password != req.body.password) {
-        return res.status(403).send({ message: "password" });
-      }
-      jwtToken = jwt.sign(
-        {
-          username: doc.username,
-          role: doc.role,
-          exp: Math.floor(Date.now() / 1000) + 3600 // token which lasts for an hour
-        },
-        process.env.JWT_SECRET || config.JWT_SECRET,
-        { algorithm: "HS256" }
-      );
+    if (req.params.type === "user") {
+      await db.users.findOne({ username: req.body.username }, (err, doc) => {
+        if (!doc) {
+          return res.status(403).send({ message: "username" });
+        } else if (doc.password != req.body.password) {
+          return res.status(403).send({ message: "password" });
+        }
+        jwtToken = jwt.sign(
+          {
+            username: doc.username,
+            role: doc.role,
+            exp: Math.floor(Date.now() / 1000) + 3600 // token which lasts for an hour
+          },
+          process.env.JWT_SECRET || config.JWT_SECRET,
+          { algorithm: "HS256" }
+        );
 
-      console.log(jwtToken);
+        console.log(jwtToken);
 
-      res.send({ user: doc, jwt: jwtToken });
-    });
+        res.send({
+          user: doc,
+          jwt: jwtToken
+        });
+      });
+    } else {
+      await db.members.findOne({ username: req.body.username }, (err, doc) => {
+        if (!doc) {
+          return res.status(403).send({ message: "username" });
+        } else if (doc.password != req.body.password) {
+          return res.status(403).send({ message: "password" });
+        }
+        jwtToken = jwt.sign(
+          {
+            username: doc.username,
+            role: doc.role,
+            exp: Math.floor(Date.now() / 1000) + 3600 // token which lasts for an hour
+          },
+          process.env.JWT_SECRET || config.JWT_SECRET,
+          { algorithm: "HS256" }
+        );
+
+        console.log(jwtToken);
+
+        res.send({
+          user: doc,
+          jwt: jwtToken
+        });
+      });
+    }
   } catch (error) {
     res.status(400).send(error);
   }

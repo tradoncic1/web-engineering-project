@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { withRouter } from "react-router";
 import { parseJwt } from "../../utils";
 import "./Home.scss";
-import { users, tasks } from "../../api";
+import { users, tasks, company } from "../../api";
 import MainNavbar from "../../Components/Navbars/MainNavbar";
 import {
   Row,
@@ -15,7 +15,8 @@ import {
   Form,
   FormGroup,
   Input,
-  Label
+  Label,
+  Spinner
 } from "reactstrap";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
@@ -28,6 +29,13 @@ const Home = props => {
     lastName: "",
     role: 0
   });
+  const [memberInput, setMemberInput] = useState({
+    firstName: "",
+    lastName: "",
+    username: "",
+    email: "",
+    password: ""
+  });
   const [taskInput, setTaskInput] = useState({
     title: "",
     description: ""
@@ -37,6 +45,7 @@ const Home = props => {
   const [isLoadingProfile, setIsLoadingProfile] = useState(false);
   const [addedTask, setAddedTask] = useState(false);
   const [taskModal, setTaskModal] = useState(false);
+  const [userModal, setUserModal] = useState(false);
 
   const fetchProfileData = async () => {
     setIsLoadingProfile(true);
@@ -56,7 +65,7 @@ const Home = props => {
       .then(res => {
         setTasks(res.data);
       })
-      .catch(e => console.log(e.response));
+      .catch(e => console.log(e));
   };
 
   useEffect(async () => {
@@ -73,12 +82,20 @@ const Home = props => {
   }, [addedTask]);
 
   const toggleTaskModal = () => setTaskModal(!taskModal);
+  const toggleUserModal = () => setUserModal(!userModal);
 
   const handleTaskInput = event => {
     const name = event.target.name;
     const value = event.target.value;
 
     setTaskInput(prevTask => ({ ...prevTask, [name]: value }));
+  };
+
+  const handleMemberInput = event => {
+    const name = event.target.name;
+    const value = event.target.value;
+
+    setMemberInput(prevTask => ({ ...prevTask, [name]: value }));
   };
 
   const handleTaskSubmit = async () => {
@@ -89,8 +106,27 @@ const Home = props => {
     setTaskModal(false);
   };
 
+  const handleUserSubmit = async () => {
+    let memberBody = memberInput;
+    if (memberBody.username.length === 0) {
+      memberBody.username =
+        memberBody.firstName.toLowerCase().substring(0, 1) +
+        memberBody.lastName.toLowerCase();
+    }
+
+    if (memberBody.password.length === 0) memberBody.password = "test";
+
+    company
+      .create(parseJwt(localStorage.getItem("jwt")).username, memberBody)
+      .catch(e => console.log(e.response));
+
+    console.log(memberBody);
+    toggleUserModal();
+  };
+
   return (
     <div className="Home-Page">
+      {/** ADD TASK MODAL */}
       <Modal
         size="lg"
         isOpen={taskModal}
@@ -132,6 +168,79 @@ const Home = props => {
           </Button>
         </ModalFooter>
       </Modal>
+
+      {/** ADD MEMBER MODAL */}
+      <Modal size="lg" toggle={toggleUserModal} isOpen={userModal}>
+        <ModalHeader>Add a member</ModalHeader>
+        <ModalBody>
+          <Form>
+            <Row>
+              <Col md={6}>
+                <FormGroup>
+                  <Label>Member first name:</Label>
+                  <Input
+                    name="firstName"
+                    value={memberInput.firstName}
+                    placeholder="eg. 'John'"
+                    onChange={handleMemberInput}
+                    valid={memberInput.firstName.length > 0}
+                  />
+                </FormGroup>
+              </Col>
+              <Col md={6}>
+                <FormGroup>
+                  <Label>Member last name:</Label>
+                  <Input
+                    name="lastName"
+                    value={memberInput.lastName}
+                    placeholder="eg. 'Smith'"
+                    onChange={handleMemberInput}
+                    valid={memberInput.lastName.length > 0}
+                  />
+                </FormGroup>
+              </Col>
+            </Row>
+            <FormGroup>
+              <Label>Member username:</Label>
+              <Input
+                name="username"
+                value={memberInput.username}
+                placeholder="eg. 'username'"
+                onChange={handleMemberInput}
+                valid={memberInput.username.length > 0}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>Member email:</Label>
+              <Input
+                name="email"
+                value={memberInput.email}
+                placeholder="eg. 'example@domain.com'"
+                onChange={handleMemberInput}
+                valid={memberInput.email.length > 0}
+              />
+            </FormGroup>
+            <FormGroup>
+              <Label>Member password:</Label>
+              <Input
+                name="password"
+                type="password"
+                value={memberInput.password}
+                placeholder="********"
+                onChange={handleMemberInput}
+                valid={memberInput.email.length > 0}
+              />
+            </FormGroup>
+          </Form>
+        </ModalBody>
+        <ModalFooter>
+          <Button color="primary" onClick={handleUserSubmit}>
+            Create
+          </Button>
+          <Button onClick={toggleUserModal}>Cancel</Button>
+        </ModalFooter>
+      </Modal>
+
       <MainNavbar />
       <div className="Home-Wrapper">
         <Row className="Home-HeaderWrap">
@@ -139,14 +248,25 @@ const Home = props => {
           <Col md={6}>
             <Row className="Home-Header">
               <div className="Home-Avatar">
-                {profileInfo.firstName.substring(0, 1)}
-                {profileInfo.lastName.substring(0, 1)}
+                {isLoadingProfile ? (
+                  <Spinner color="light" type="grow" />
+                ) : (
+                  <div>
+                    {profileInfo.firstName.substring(0, 1)}
+                    {profileInfo.lastName.substring(0, 1)}
+                  </div>
+                )}
               </div>
               <span className="Home-Username">{profileInfo.username}</span>
               <span className="Home-Name">
                 {profileInfo.firstName} {profileInfo.lastName}
               </span>
             </Row>
+            {profileInfo.role === 1 ? (
+              <Button color="primary" onClick={() => setUserModal(true)}>
+                Create User
+              </Button>
+            ) : null}
           </Col>
           <Col md={3} />
         </Row>
