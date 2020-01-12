@@ -7,7 +7,7 @@ import { withRouter } from "react-router";
 const Landing = props => {
   useEffect(() => {
     if (checkToken()) {
-      props.history.push("/home");
+      props.history.push("/projects");
     }
   });
   return (

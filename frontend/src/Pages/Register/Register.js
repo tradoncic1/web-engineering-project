@@ -42,7 +42,7 @@ const Register = props => {
 
   useEffect(() => {
     if (checkToken()) {
-      props.history.push("/home");
+      props.history.push("/projects");
     }
   }, []);
 
@@ -86,7 +86,9 @@ const Register = props => {
 
       await auth
         .registration(input)
-        .then(res => props.history.push("/login"))
+        .then(res => {
+          props.history.push("/login");
+        })
         .catch(error => {
           toast.warn("That username is already taken!", {
             position: "top-right",

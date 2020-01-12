@@ -13,5 +13,11 @@ export default {
       headers: {
         auth: localStorage.getItem("jwt")
       }
+    }),
+  delete: (owner, key) =>
+    axios.delete(`${BASE_URL}/projects/delete/${owner}/${key}`, {
+      headers: {
+        auth: localStorage.getItem("jwt")
+      }
     })
 };

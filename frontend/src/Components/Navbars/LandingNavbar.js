@@ -15,7 +15,7 @@ const LandingNavbar = props => {
     if (
       props.location.pathname === "/" ||
       props.location.pathname === "/login" ||
-      props.location.pathname === "register"
+      props.location.pathname === "/register"
     )
       setShouldRender(true);
     else setShouldRender(false);

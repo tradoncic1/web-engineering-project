@@ -20,7 +20,7 @@ import { checkToken, parseJwt } from "../../utils";
 import { users, company, projects } from "../../api";
 import "./Projects.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlusCircle } from "@fortawesome/free-solid-svg-icons";
+import { faPlusCircle, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
 
 const Projects = props => {
@@ -53,7 +53,12 @@ const Projects = props => {
 
     const username = parseJwt(localStorage.getItem("jwt")).username;
 
-    await users.get(username).then(res => setProfileInfo(res.data));
+    await users.get(username).then(res => {
+      setProfileInfo(res.data);
+      const projectUsername =
+        res.data.role === 2 ? res.data.owner : res.data.username;
+      fetchProjects(projectUsername);
+    });
 
     setIsLoadingProfile(false);
   };
@@ -67,23 +72,15 @@ const Projects = props => {
     }
   }, [props.match.params.username]);
 
-  const fetchProjects = async () => {
+  const fetchProjects = async username => {
     setIsLoadingProjects(true);
+    console.log(profileInfo);
     await projects
-      .search(parseJwt(localStorage.getItem("jwt")).username)
+      .search(username)
       .then(res => setProjectList(res.data.reverse()));
 
     setIsLoadingProjects(false);
   };
-
-  useEffect(() => {
-    if (!checkToken()) {
-      props.history.push("/");
-      window.location.reload();
-    } else {
-      fetchProjects();
-    }
-  }, []);
 
   const toggleUserModal = () => setUserModal(!userModal);
   const toggleProjectModal = () => setProjectModal(!projectModal);
@@ -125,15 +122,16 @@ const Projects = props => {
   };
 
   const handleProjectSubmit = async () => {
+    const username = parseJwt(localStorage.getItem("jwt")).username;
     await projects
-      .create(parseJwt(localStorage.getItem("jwt")).username, projectInput)
+      .create(username, projectInput)
       .then(res => {
         console.log(res.data);
         const tmpProject = {
           name: projectInput.name,
           description: projectInput.description,
-          key: projectInput.key,
-          owner: parseJwt(localStorage.getItem("jwt")).username
+          key: `${projectInput.key}${username}`,
+          owner: username
         };
         const tmpProjList = [tmpProject, ...projectList];
         setProjectList([]);
@@ -141,6 +139,17 @@ const Projects = props => {
       })
       .catch(e => toast.warn("An error occured while creating the project"));
     setProjectModal(false);
+  };
+
+  const handleProjectDelete = async key => {
+    const username =
+      profileInfo.role === 2 ? profileInfo.owner : profileInfo.username;
+    await projects.delete(username, key).then(res => {
+      const newProjectList = projectList.filter(project => project.key !== key);
+
+      setProjectList([]);
+      setProjectList(newProjectList);
+    });
   };
 
   return (
@@ -225,6 +234,7 @@ const Projects = props => {
         </ModalFooter>
       </Modal>
 
+      {/* ADD PROJECT MODAL */}
       <Modal size="lg" toggle={toggleProjectModal} isOpen={projectModal}>
         <ModalHeader>Add Project</ModalHeader>
         <ModalBody>
@@ -275,6 +285,7 @@ const Projects = props => {
           <Button onClick={toggleProjectModal}>Cancel</Button>
         </ModalFooter>
       </Modal>
+
       <Row className="Projects-HeaderWrap">
         <Col md={3} />
         <Col md={6}>
@@ -305,15 +316,35 @@ const Projects = props => {
       <Row className="Projects-ListWrap">
         <Col md={2} />
         <Col md={8}>
-          <Row>
-            <Card className="Projects-Card" onClick={toggleProjectModal}>
-              <FontAwesomeIcon icon={faPlusCircle} />
-              Add Project
-            </Card>
+          <Row className="Projects-CardWrap">
+            {parseJwt(localStorage.getItem("jwt")).role === 2 ? null : (
+              <Card className="Projects-Card" onClick={toggleProjectModal}>
+                <FontAwesomeIcon icon={faPlusCircle} />
+                Add Project
+              </Card>
+            )}
             {isLoadingProjects
               ? null
               : projectList.map((project, index) => (
-                  <Card key={index} className="Projects-Card">
+                  <Card
+                    key={index}
+                    className="Projects-Card"
+                    onClick={() =>
+                      props.history.push(
+                        `/tasks/${project.key.substring(
+                          0,
+                          project.key.length - project.owner.length
+                        )}`
+                      )
+                    }
+                  >
+                    {profileInfo.role === 2 ? null : (
+                      <FontAwesomeIcon
+                        className="Projects-Delete"
+                        icon={faTrashAlt}
+                        onClick={() => handleProjectDelete(project.key)}
+                      />
+                    )}
                     {project.name}
                   </Card>
                 ))}

@@ -169,53 +169,60 @@ app.post("/authenticate/:type", async (req, res) => {
   try {
     let jwtToken;
     if (req.params.type === "user") {
-      await db.users.findOne({ username: req.body.username }, (err, doc) => {
-        if (!doc) {
-          return res.status(403).send({ message: "username" });
-        } else if (doc.password != req.body.password) {
-          return res.status(403).send({ message: "password" });
+      await db.users.findOne(
+        { username: req.body.username, isDeleted: false },
+        (err, doc) => {
+          if (!doc) {
+            return res.status(403).send({ message: "username" });
+          } else if (doc.password != req.body.password) {
+            return res.status(403).send({ message: "password" });
+          }
+          jwtToken = jwt.sign(
+            {
+              username: doc.username,
+              role: doc.role,
+              exp: Math.floor(Date.now() / 1000) + 3600 // token which lasts for an hour
+            },
+            process.env.JWT_SECRET || config.JWT_SECRET,
+            { algorithm: "HS256" }
+          );
+
+          console.log(jwtToken);
+
+          res.send({
+            user: doc,
+            jwt: jwtToken
+          });
         }
-        jwtToken = jwt.sign(
-          {
-            username: doc.username,
-            role: doc.role,
-            exp: Math.floor(Date.now() / 1000) + 3600 // token which lasts for an hour
-          },
-          process.env.JWT_SECRET || config.JWT_SECRET,
-          { algorithm: "HS256" }
-        );
-
-        console.log(jwtToken);
-
-        res.send({
-          user: doc,
-          jwt: jwtToken
-        });
-      });
+      );
     } else {
-      await db.members.findOne({ username: req.body.username }, (err, doc) => {
-        if (!doc) {
-          return res.status(403).send({ message: "username" });
-        } else if (doc.password != req.body.password) {
-          return res.status(403).send({ message: "password" });
+      await db.members.findOne(
+        { username: req.body.username, isDeleted: false },
+        (err, doc) => {
+          if (!doc) {
+            return res.status(403).send({ message: "username" });
+          } else if (doc.password != req.body.password) {
+            return res.status(403).send({ message: "password" });
+          }
+          jwtToken = jwt.sign(
+            {
+              username: doc.username,
+              role: doc.role,
+              owner: doc.owner,
+              exp: Math.floor(Date.now() / 1000) + 3600 // token which lasts for an hour
+            },
+            process.env.JWT_SECRET || config.JWT_SECRET,
+            { algorithm: "HS256" }
+          );
+
+          console.log(jwtToken);
+
+          res.send({
+            user: doc,
+            jwt: jwtToken
+          });
         }
-        jwtToken = jwt.sign(
-          {
-            username: doc.username,
-            role: doc.role,
-            exp: Math.floor(Date.now() / 1000) + 3600 // token which lasts for an hour
-          },
-          process.env.JWT_SECRET || config.JWT_SECRET,
-          { algorithm: "HS256" }
-        );
-
-        console.log(jwtToken);
-
-        res.send({
-          user: doc,
-          jwt: jwtToken
-        });
-      });
+      );
     }
   } catch (error) {
     res.status(400).send(error);
@@ -228,29 +235,39 @@ app.post("/registration", async (req, res) => {
 
   try {
     await db.users.findOne(
-      { username: req.body.username },
+      { username: req.body.username, isDeleted: false },
       async (err, docs) => {
         if (docs != null) {
-          return res.status(400).send("Register failed! User already exists");
-        }
-
-        await db.users.insert(
-          {
-            username: req.body.username,
-            password: req.body.password,
-            firstName: req.body.firstName,
-            lastName: req.body.lastName,
-            email: req.body.email,
-            role: req.body.role
-          },
-          (error, response) => {
-            if (error) {
-              return res
-                .status(400)
-                .send(`Insertion failed! Reason: ${error.errmsg}`);
+          res.status(400).send("Register failed! User already exists");
+        } else {
+          await db.members.findOne(
+            { username: req.body.username, isDeleted: false },
+            async (errMem, docMem) => {
+              if (docMem != null) {
+                res.status(400).send("Register failed! User already exists");
+              } else {
+                await db.users.insert(
+                  {
+                    username: req.body.username,
+                    password: req.body.password,
+                    firstName: req.body.firstName,
+                    lastName: req.body.lastName,
+                    email: req.body.email,
+                    role: req.body.role,
+                    isDeleted: false
+                  },
+                  (error, response) => {
+                    if (error) {
+                      res.status(400).send({
+                        message: `Insertion failed! Reason: ${error.errmsg}`
+                      });
+                    }
+                  }
+                );
+              }
             }
-          }
-        );
+          );
+        }
       }
     );
   } catch (error) {

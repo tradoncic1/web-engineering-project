@@ -81,7 +81,10 @@ module.exports = (router, db, mongojs, jwt, config, nodemailer) => {
    */
   router.get("/users/:username", (req, res) => {
     var username = req.params.username;
-    db.users.findOne({ username: username }, function(err, docs) {
+    db.users.findOne({ username: username, isDeleted: false }, function(
+      err,
+      docs
+    ) {
       res.json(docs);
     });
   });
@@ -91,13 +94,13 @@ module.exports = (router, db, mongojs, jwt, config, nodemailer) => {
 
     try {
       await db.members.findOne(
-        { username: req.body.username },
+        { username: req.body.username, isDeleted: false },
         async (err, docs) => {
           if (docs != null) {
             return res.status(404).send({ message: "username" });
           }
           await db.members.findOne(
-            { email: req.body.email },
+            { email: req.body.email, isDeleted: false },
             (errMail, docsMail) => {
               if (docsMail != null) {
                 return res.status(404).send({ message: "email" });
@@ -133,7 +136,8 @@ module.exports = (router, db, mongojs, jwt, config, nodemailer) => {
               lastName: req.body.lastName,
               email: req.body.email,
               role: 2,
-              owner: req.params.username
+              owner: req.params.username,
+              isDeleted: false
             },
             (error, response) => {
               if (error) {

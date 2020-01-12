@@ -20,13 +20,16 @@ module.exports = (router, db, mongojs, jwt, config) => {
   });
 
   router.get("/search/:username", (req, res) => {
-    db.projects.find({ owner: req.params.username }, (err, docs) => {
-      if (err) {
-        res.status(500).send({ message: "Error fetching projects" });
-      } else {
-        res.send(docs);
+    db.projects.find(
+      { owner: req.params.username, isDeleted: false },
+      (err, docs) => {
+        if (err) {
+          res.status(500).send({ message: "Error fetching projects" });
+        } else {
+          res.send(docs);
+        }
       }
-    });
+    );
   });
 
   router.post("/create/:username", (req, res) => {
@@ -35,7 +38,8 @@ module.exports = (router, db, mongojs, jwt, config) => {
         key: req.body.key,
         name: req.body.name,
         description: req.body.description,
-        owner: req.params.username
+        owner: req.params.username,
+        isDeleted: false
       },
       (err, doc) => {
         if (err) {
@@ -45,6 +49,20 @@ module.exports = (router, db, mongojs, jwt, config) => {
         } else {
           console.log(doc);
           res.status(200).send(doc);
+        }
+      }
+    );
+  });
+
+  router.delete("/delete/:username/:key", (req, res) => {
+    db.projects.update(
+      { key: req.params.key, owner: req.params.username },
+      { $set: { isDeleted: true } },
+      (err, doc) => {
+        if (err) {
+          res.status(500).send({ message: "Errorino" });
+        } else {
+          res.send(doc);
         }
       }
     );

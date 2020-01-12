@@ -32,10 +32,16 @@ const Tasks = props => {
   const [taskModal, setTaskModal] = useState(false);
 
   const fetchUserTasks = async () => {
-    const username = parseJwt(localStorage.getItem("jwt")).username;
+    const jwt = parseJwt(localStorage.getItem("jwt"));
+    const username = jwt.role === 2 ? jwt.owner : jwt.username;
+
+    console.log(props.match.params.projectKey);
 
     await tasks
-      .getTasks(username)
+      .getTasks({
+        username: jwt.username,
+        projectKey: `${props.match.params.projectKey}${username}`
+      })
       .then(res => {
         setTasks(res.data);
       })
@@ -61,8 +67,15 @@ const Tasks = props => {
   };
 
   const handleTaskSubmit = async () => {
-    const username = parseJwt(localStorage.getItem("jwt")).username;
-    await tasks.addTask(username, taskInput);
+    const jwt = parseJwt(localStorage.getItem("jwt"));
+    const username = jwt.role === 2 ? jwt.owner : jwt.username;
+    let tasksBody = taskInput;
+
+    tasksBody.username = jwt.username;
+    await tasks.addTask(
+      `${props.match.params.projectKey}${username}`,
+      tasksBody
+    );
 
     setAddedTask(!addedTask);
     setTaskModal(false);

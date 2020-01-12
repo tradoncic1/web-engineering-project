@@ -1,6 +1,7 @@
 module.exports = (router, db, mongojs, jwt, config) => {
+  let role = 4;
   router.use((req, res, next) => {
-    console.log(`Admin route accessed by: ${req.ip}`); // log visits
+    console.log(`Tasks route accessed by: ${req.ip}`); // log visits
 
     /* Check for proper JWT */
     let authorization = req.get("auth");
@@ -14,23 +15,25 @@ module.exports = (router, db, mongojs, jwt, config) => {
               .status(401)
               .send({ message: "Unauthorized access: " + error.message });
           } else {
+            role = decoded.role;
             next();
           }
         }
       );
     } else {
-      res.status(401).send({ message: "Unauthorized access." });
+      res.status(401).send({ message: "Unauthorized access. dumb dumb" });
     }
   });
 
-  router.post("/:username", (req, res) => {
+  router.post("/create/:projectKey", (req, res) => {
     db.tasks.insert(
       {
-        username: req.params.username,
+        username: req.body.username,
         title: req.body.title,
         description: req.body.description ? req.body.description : "",
         status: req.body.status ? req.body.status : 1,
-        isDeleted: false
+        isDeleted: false,
+        projectKey: req.params.projectKey
       },
       (error, response) => {
         if (error) {
@@ -44,21 +47,23 @@ module.exports = (router, db, mongojs, jwt, config) => {
     );
   });
 
-  router.get("/:username", (req, res) => {
-    db.tasks.find(
-      {
-        username: req.params.username,
-        isDeleted: false
-      },
-      { title: 1, description: 1, status: 1, _id: 1 },
-      (error, response) => {
-        if (error) {
-          return res.status(400).send(`Fetch failed! Reason: ${error.errmsg}`);
-        } else {
-          res.send(response);
+  router.post("/search", async (req, res) => {
+    if (role === 1) {
+      db.tasks.find({ projectKey: req.body.projectKey }, (errTsk, docsTsk) => {
+        if (docsTsk) {
+          res.status(200).send(docsTsk);
         }
-      }
-    );
+      });
+    } else {
+      db.tasks.find(
+        { projectKey: req.body.projectKey, username: req.body.username },
+        (errTsk, docsTsk) => {
+          if (docsTsk) {
+            res.status(200).send(docsTsk);
+          }
+        }
+      );
+    }
   });
 
   router.put("/status/:username", (req, res) => {
@@ -79,7 +84,7 @@ module.exports = (router, db, mongojs, jwt, config) => {
     );
   });
 
-  router.put("/:username", (req, res) => {
+  router.put("/delete", (req, res) => {
     const taskToUpdate = req.body.id;
 
     db.tasks.update(

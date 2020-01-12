@@ -7,24 +7,36 @@
 }
 
 .Projects-Card {
-  padding: 25px;
   cursor: pointer;
   display: flex;
-  flex-direction: row;
+  flex-direction: column;
   align-items: center;
+  justify-content: center;
   height: 85px;
+  min-width: 150px;
   margin: 15px;
   transition: all 0.25s ease;
-
-  > * {
-    margin: 5px;
-  }
+  position: relative;
 
   &:hover {
     background-color: lightskyblue;
     box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.125);
     color: white;
+
+    .Projects-Delete {
+      //display: block;
+      opacity: 1;
+    }
   }
+}
+
+.Projects-Delete {
+  position: absolute;
+  top: 5%;
+  left: 5%;
+  //display: none;
+  opacity: 0;
+  transition: all 0.25s ease;
 }
 
 .Projects-InfoWrap {
@@ -39,6 +51,11 @@
 
 .Projects-ListWrap {
   width: 100%;
+}
+
+.Projects-CardWrap {
+  display: flex;
+  justify-content: center;
 }
 
 .Projects-HeaderWrap {
@@ -80,4 +97,11 @@
 .Projects-Name {
   font-size: 24px;
   font-weight: 600;
+}
+
+@media screen and (min-width: 768px) {
+  .Projects-CardWrap {
+    display: flex;
+    justify-content: start;
+  }
 }

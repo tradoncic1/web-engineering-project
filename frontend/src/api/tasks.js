@@ -2,14 +2,14 @@ import axios from "axios";
 import { BASE_URL } from "../utils";
 
 export default {
-  addTask: (username, body) =>
-    axios.post(`${BASE_URL}/tasks/${username}`, body, {
+  addTask: (projectKey, body) =>
+    axios.post(`${BASE_URL}/tasks/create/${projectKey}`, body, {
       headers: {
         auth: localStorage.getItem("jwt")
       }
     }),
-  getTasks: username =>
-    axios.get(`${BASE_URL}/tasks/${username}`, {
+  getTasks: body =>
+    axios.post(`${BASE_URL}/tasks/search`, body, {
       headers: {
         auth: localStorage.getItem("jwt")
       }
@@ -21,7 +21,7 @@ export default {
       }
     }),
   delete: (username, body) =>
-    axios.put(`${BASE_URL}/tasks/${username}`, body, {
+    axios.put(`${BASE_URL}/tasks/delete`, body, {
       headers: {
         auth: localStorage.getItem("jwt")
       }
