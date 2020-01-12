@@ -52,7 +52,7 @@ const Login = props => {
       .login(type, input)
       .then(res => {
         localStorage.setItem("jwt", res.data.jwt);
-        props.history.push("/home");
+        props.history.push("/projects");
       })
       .catch(error => {
         if (error && error.response) {
@@ -71,7 +71,6 @@ const Login = props => {
 
   return (
     <div className="Login-Page">
-      <LandingNavbar />
       <div className="LoginForm-Wrapper">
         <h2>login</h2>
         <Form className="form" onSubmit={handleSubmit}>
@@ -106,7 +105,7 @@ const Login = props => {
               <Input
                 type="checkbox"
                 value={isMember}
-                onChange={e => setIsMember(e.target.value)}
+                onClick={() => setIsMember(!isMember)}
               />
               Login as Company member
             </Label>

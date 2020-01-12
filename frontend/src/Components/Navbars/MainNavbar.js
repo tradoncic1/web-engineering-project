@@ -14,6 +14,17 @@ import "./MainNavbar.scss";
 const MainNavbar = props => {
   const [isOpen, setIsOpen] = useState(false);
   const [logoutModalShow, setLogoutModalShow] = useState(false);
+  const [shouldRender, setShouldRender] = useState(false);
+
+  useEffect(() => {
+    if (
+      props.location.pathname === "/" ||
+      props.location.pathname === "/login" ||
+      props.location.pathname === "register"
+    )
+      setShouldRender(false);
+    else setShouldRender(true);
+  }, [props.location.pathname]);
 
   const handleCollapseClose = () => setIsOpen(false);
 
@@ -21,16 +32,18 @@ const MainNavbar = props => {
     setLogoutModalShow(!logoutModalShow);
     localStorage.removeItem("jwt");
     props.history.push("/");
-    window.location.reload();
   };
 
   const itemsMarkup = (
     <div className="MainNavbar-Items">
       <div className="MainNavbar-Item" onClick={handleCollapseClose}>
-        <Link to="/home">Home</Link>
+        <Link to="/projects">Projects</Link>
       </div>
       <div className="MainNavbar-Item" onClick={handleCollapseClose}>
-        <Link>Edit Profile</Link>
+        <Link to="/tasks">Tasks</Link>
+      </div>
+      <div className="MainNavbar-Item" onClick={handleCollapseClose}>
+        <Link to="">Edit Profile</Link>
       </div>
       <div
         className="MainNavbar-Item MainNavbar-Logout"
@@ -47,7 +60,7 @@ const MainNavbar = props => {
     </div>
   );
 
-  return (
+  return shouldRender ? (
     <div className="MainNavbar-Wrapper">
       <Modal
         isOpen={logoutModalShow}
@@ -100,7 +113,7 @@ const MainNavbar = props => {
         <div className="MainNavbar-Collapsable--Content">{itemsMarkup}</div>
       </Collapse>
     </div>
-  );
+  ) : null;
 };
 
 export default withRouter(MainNavbar);

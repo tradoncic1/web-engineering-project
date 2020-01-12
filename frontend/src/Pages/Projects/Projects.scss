@@ -1,0 +1,83 @@
+.Projects-Wrapper {
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 75px 25px;
+}
+
+.Projects-Card {
+  padding: 25px;
+  cursor: pointer;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  height: 85px;
+  margin: 15px;
+  transition: all 0.25s ease;
+
+  > * {
+    margin: 5px;
+  }
+
+  &:hover {
+    background-color: lightskyblue;
+    box-shadow: inset 0 0 15px rgba(0, 0, 0, 0.125);
+    color: white;
+  }
+}
+
+.Projects-InfoWrap {
+  border-left: 1px solid lightgray;
+  padding: 15px;
+}
+
+.Projects-Info {
+  border-radius: 4px;
+  border: 1px solid lightgray;
+}
+
+.Projects-ListWrap {
+  width: 100%;
+}
+
+.Projects-HeaderWrap {
+  margin: 0 -25px;
+  margin-bottom: 15px;
+  padding-bottom: 15px;
+  background-color: lightskyblue;
+}
+
+.Projects-Header {
+  margin: 0;
+  padding: 30px;
+  height: 250px;
+  width: 250px;
+  align-self: center;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.Projects-Avatar {
+  align-self: center;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  color: white;
+  height: 96px;
+  width: 96px;
+  font-size: 56px;
+  background-color: lightseagreen;
+  border-radius: 50%;
+}
+
+.Projects-Username {
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.Projects-Name {
+  font-size: 24px;
+  font-weight: 600;
+}

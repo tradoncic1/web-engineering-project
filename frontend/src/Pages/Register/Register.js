@@ -102,7 +102,6 @@ const Register = props => {
 
   return (
     <div className="Register-Page">
-      <LandingNavbar />
       <div className="RegisterForm-Wrapper">
         <h2>register</h2>
         <Form className="form" onSubmit={handleSubmit}>

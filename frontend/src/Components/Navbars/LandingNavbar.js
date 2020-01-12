@@ -1,14 +1,25 @@
 import React, { useState, useEffect } from "react";
 import { Collapse } from "reactstrap";
-import { Link } from "react-router-dom";
+import { Link, withRouter } from "react-router-dom";
 
 import "./LandingNavbar.scss";
 
-const LandingNavbar = () => {
+const LandingNavbar = props => {
   const NAV_COL = "rgba(31, 16, 247, 0.65)";
 
   const [navColor, setNavColor] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const [shouldRender, setShouldRender] = useState(false);
+
+  useEffect(() => {
+    if (
+      props.location.pathname === "/" ||
+      props.location.pathname === "/login" ||
+      props.location.pathname === "register"
+    )
+      setShouldRender(true);
+    else setShouldRender(false);
+  }, [props.location.pathname]);
 
   const handleCollapseClose = () => setIsOpen(false);
 
@@ -53,7 +64,7 @@ const LandingNavbar = () => {
     </div>
   );
 
-  return (
+  return shouldRender ? (
     <div
       className="LandingNavbar-Wrapper"
       style={{ backgroundColor: navColor }}
@@ -83,7 +94,7 @@ const LandingNavbar = () => {
         <div className="LandingNavbar-Collapsable--Content">{itemsMarkup}</div>
       </Collapse>
     </div>
-  );
+  ) : null;
 };
 
-export default LandingNavbar;
+export default withRouter(LandingNavbar);

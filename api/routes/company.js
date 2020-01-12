@@ -94,11 +94,16 @@ module.exports = (router, db, mongojs, jwt, config, nodemailer) => {
         { username: req.body.username },
         async (err, docs) => {
           if (docs != null) {
-            if (docs.email === req.body.email) {
-              return res.status(404).send({ message: "email" });
-            }
             return res.status(404).send({ message: "username" });
           }
+          await db.members.findOne(
+            { email: req.body.email },
+            (errMail, docsMail) => {
+              if (docsMail != null) {
+                return res.status(404).send({ message: "email" });
+              }
+            }
+          );
 
           let transporter = nodemailer.createTransport({
             host: "smtp-mail.outlook.com",

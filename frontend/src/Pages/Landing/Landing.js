@@ -12,7 +12,6 @@ const Landing = props => {
   });
   return (
     <div className="Landing-Wrapper">
-      <LandingNavbar />
       <div className="Landing-Welcome">
         <div className="Landing-Title">TrackR</div>
       </div>

@@ -1,0 +1,40 @@
+.Tasks-Wrapper {
+  padding-top: 75px;
+  overflow-x: hidden;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.Tasks-TasksRow {
+  width: 100%;
+  min-height: calc(100vh - 75px);
+  background-color: rgb(218, 236, 247);
+  margin: 0;
+  padding: 15px;
+  border-top: 1px solid lightskyblue;
+  box-shadow: 0 -1px 5px lightskyblue;
+  justify-content: space-between;
+}
+
+.Tasks-TasksColumn {
+  min-height: 100%;
+  padding: 0;
+  margin: 0 15px;
+  background-color: white;
+  border-radius: 4px;
+}
+
+.Tasks-CreateTask {
+  font-size: larger;
+  margin: 15px;
+  border-bottom: 1px solid lightslategray;
+  color: skyblue;
+  transition: color 0.25s ease;
+  cursor: pointer;
+
+  &:hover {
+    color: lightblue;
+  }
+}

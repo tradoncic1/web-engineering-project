@@ -83,6 +83,11 @@ let users_router = express.Router();
 require("./routes/users")(users_router, db, mongojs, jwt, config);
 app.use("/users", users_router);
 
+//projects router setup
+let projects_router = express.Router();
+require("./routes/projects")(projects_router, db, mongojs, jwt, config);
+app.use("/projects", projects_router);
+
 /** Swagger setup */
 const swaggerDefinition = {
   info: {
