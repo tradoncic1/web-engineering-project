@@ -16,8 +16,7 @@ const getBaseUrl = () => {
 
 export const getHeaders = () => {
   return {
-    auth: localStorage.getItem("jwt"),
-    "Content-Type": "application/json"
+    auth: localStorage.getItem("jwt")
   };
 };
 

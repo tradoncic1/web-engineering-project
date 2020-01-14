@@ -261,6 +261,8 @@ app.post("/registration", async (req, res) => {
                       res.status(400).send({
                         message: `Insertion failed! Reason: ${error.errmsg}`
                       });
+                    } else {
+                      res.status(200).send(response);
                     }
                   }
                 );

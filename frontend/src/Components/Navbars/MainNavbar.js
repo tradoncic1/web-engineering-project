@@ -40,10 +40,7 @@ const MainNavbar = props => {
         <Link to="/projects">Projects</Link>
       </div>
       <div className="MainNavbar-Item" onClick={handleCollapseClose}>
-        <Link to="/tasks">Tasks</Link>
-      </div>
-      <div className="MainNavbar-Item" onClick={handleCollapseClose}>
-        <Link to="">Edit Profile</Link>
+        <Link to="/editProfile">Edit Profile</Link>
       </div>
       <div
         className="MainNavbar-Item MainNavbar-Logout"

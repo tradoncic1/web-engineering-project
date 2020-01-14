@@ -27,4 +27,45 @@ module.exports = (router, db, mongojs, jwt, config) => {
       }
     });
   });
+
+  router.post("/update/:username", (req, res) => {
+    db.users.find({ username: req.params.username }, (errFind, resFind) => {
+      let model = req.body;
+      console.log(model);
+
+      if (req.body.email === "") {
+        model.email = resFind.email;
+      }
+      if (req.body.password === "") {
+        model.password = resFind.password;
+      }
+      console.log(model);
+
+      db.users.update(
+        { username: req.params.username },
+        { $set: model },
+        (err, doc) => {
+          if (err) {
+            res.status(500).send("An error occured");
+          } else {
+            res.status(200).send(doc);
+          }
+        }
+      );
+    });
+  });
+
+  router.post("/upgrade/:username", (req, res) => {
+    db.users.update(
+      { username: req.params.username },
+      { $set: { role: 1 } },
+      (err, doc) => {
+        if (err) {
+          res.status(500).send("An error occured");
+        } else {
+          res.status(200).send(doc);
+        }
+      }
+    );
+  });
 };
