@@ -39,7 +39,6 @@ const EditProfile = props => {
     await users
       .get(parseJwt(localStorage.getItem("jwt")).username)
       .then(res => {
-        console.log(res.data);
         setProfileInfo(res.data);
         setInput({
           username: res.data.username,

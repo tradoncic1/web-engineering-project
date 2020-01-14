@@ -1,0 +1,19 @@
+.Teams-Page {
+  padding-top: 100px;
+
+  .Teams-PageTitle {
+    display: flex;
+    justify-content: start;
+    border-bottom: 1px solid lightseagreen;
+    margin-bottom: 18px;
+  }
+
+  .Teams-PageCol {
+    padding: 0 32px;
+
+    label {
+      display: flex;
+      justify-content: start;
+    }
+  }
+}

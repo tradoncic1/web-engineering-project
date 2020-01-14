@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios from "./axios";
 import { BASE_URL } from "../utils";
 
 export default {
@@ -7,5 +7,9 @@ export default {
       headers: {
         auth: localStorage.getItem("jwt")
       }
+    }),
+  search: username =>
+    axios.get(`${BASE_URL}/company/search/${username}`, {
+      headers: { auth: localStorage.getItem("jwt") }
     })
 };

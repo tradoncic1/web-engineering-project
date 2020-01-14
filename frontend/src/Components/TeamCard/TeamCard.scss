@@ -1,0 +1,46 @@
+.TeamCard-Wrap {
+  margin-bottom: 8px;
+}
+
+.TeamCard-Body {
+  padding: 8px;
+}
+
+.TeamCard-Footer {
+  background-color: #d9534f;
+  color: white;
+  cursor: pointer;
+  transition: background-color 0.25s ease;
+  padding: 4px;
+
+  &:hover {
+    background-color: #f05e59;
+  }
+}
+
+.TeamCard-Info {
+  margin: 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+
+  .TeamCard-Names {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .TeamCard-Email {
+    margin: 0;
+    padding: 0;
+    display: flex;
+    justify-content: flex-end;
+  }
+}
+.TeamCard-Joined {
+  margin: 0;
+  display: flex;
+  justify-content: end;
+}

@@ -44,9 +44,13 @@ module.exports = (router, db, mongojs, jwt, config, nodemailer) => {
    *       500:
    *         description: Something is wrong with service please contact system administrator
    */
-  router.get("/users", (req, res) => {
-    db.users.find({}, (err, docs) => {
-      res.json(docs);
+  router.get("/search/:username", (req, res) => {
+    db.members.find({ owner: req.params.username }, (err, docs) => {
+      if (err) {
+        res.status(500).send("An error occured");
+      } else {
+        res.status(200).send(docs);
+      }
     });
   });
 
@@ -137,7 +141,8 @@ module.exports = (router, db, mongojs, jwt, config, nodemailer) => {
               email: req.body.email,
               role: 2,
               owner: req.params.username,
-              isDeleted: false
+              isDeleted: false,
+              created: req.body.created
             },
             (error, response) => {
               if (error) {
@@ -152,6 +157,8 @@ module.exports = (router, db, mongojs, jwt, config, nodemailer) => {
                     console.log("Email sent: " + info.response);
                   }
                 });
+
+                res.status(200).send(response);
               }
             }
           );

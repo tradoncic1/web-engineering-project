@@ -6,7 +6,10 @@ import {
   Label,
   Input,
   Button,
-  Spinner
+  Spinner,
+  InputGroupAddon,
+  InputGroup,
+  InputGroupText
 } from "reactstrap";
 import { Link, withRouter } from "react-router-dom";
 import { auth } from "../../api/index";
@@ -14,6 +17,8 @@ import { auth } from "../../api/index";
 import "./Login.scss";
 import LandingNavbar from "../../Components/Navbars/LandingNavbar";
 import { checkToken } from "../../utils";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEyeSlash, faEye } from "@fortawesome/free-solid-svg-icons";
 
 const Login = props => {
   const [input, setInput] = useState({
@@ -23,6 +28,7 @@ const Login = props => {
   const [invalidUsername, setInvalidUsername] = useState(false);
   const [invalidPassword, setInvalidPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [isVisible, setIsVisible] = useState(false);
   const [isMember, setIsMember] = useState(false);
 
   useEffect(() => {
@@ -89,15 +95,24 @@ const Login = props => {
           </Col>
           <Col>
             <FormGroup>
-              <Label for="password">password</Label>
-              <Input
-                type="password"
-                name="password"
-                id="password"
-                placeholder="********"
-                value={input.password}
-                onChange={handleInput}
-              />
+              <Label>Password:</Label>
+              <InputGroup>
+                <InputGroupAddon addonType="append">
+                  <InputGroupText
+                    onMouseDown={() => setIsVisible(true)}
+                    onMouseUp={() => setIsVisible(false)}
+                    className="EditProfile-IconVisible"
+                  >
+                    <FontAwesomeIcon icon={isVisible ? faEyeSlash : faEye} />
+                  </InputGroupText>
+                </InputGroupAddon>
+                <Input
+                  name="password"
+                  type={isVisible ? "text" : "password"}
+                  value={input.password}
+                  onChange={handleInput}
+                />
+              </InputGroup>
             </FormGroup>
           </Col>
           <FormGroup check>

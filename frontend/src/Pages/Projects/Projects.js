@@ -74,7 +74,6 @@ const Projects = props => {
 
   const fetchProjects = async username => {
     setIsLoadingProjects(true);
-    console.log(profileInfo);
     await projects
       .search(username)
       .then(res => setProjectList(res.data.reverse()));
@@ -107,12 +106,11 @@ const Projects = props => {
         memberBody.lastName.toLowerCase();
     }
 
-    if (memberBody.password.length === 0) memberBody.password = "test";
+    if (memberBody.password.length === 0) memberBody.password = "12345678";
 
     company
       .create(parseJwt(localStorage.getItem("jwt")).username, memberBody)
       .catch(e => {
-        console.log(e.response.data.message);
         toast.warn(
           `A user with that ${e.response.data.message} already exists`
         );
@@ -126,7 +124,6 @@ const Projects = props => {
     await projects
       .create(username, projectInput)
       .then(res => {
-        console.log(res.data);
         const tmpProject = {
           name: projectInput.name,
           description: projectInput.description,

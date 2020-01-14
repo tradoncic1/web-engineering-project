@@ -1,5 +1,5 @@
-import axios from "axios";
 import { BASE_URL } from "../utils";
+import axios from "./axios";
 
 export default {
   create: (username, body) =>

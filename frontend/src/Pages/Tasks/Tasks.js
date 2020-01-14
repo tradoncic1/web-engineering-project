@@ -35,8 +35,6 @@ const Tasks = props => {
     const jwt = parseJwt(localStorage.getItem("jwt"));
     const username = jwt.role === 2 ? jwt.owner : jwt.username;
 
-    console.log(props.match.params.projectKey);
-
     await tasks
       .getTasks({
         username: jwt.username,

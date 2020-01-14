@@ -10,6 +10,7 @@ import {
 import { Link, withRouter } from "react-router-dom";
 
 import "./MainNavbar.scss";
+import { parseJwt } from "../../utils";
 
 const MainNavbar = props => {
   const [isOpen, setIsOpen] = useState(false);
@@ -36,6 +37,12 @@ const MainNavbar = props => {
 
   const itemsMarkup = (
     <div className="MainNavbar-Items">
+      {localStorage.getItem("jwt") &&
+      parseJwt(localStorage.getItem("jwt")).role === 1 ? (
+        <div className="MainNavbar-Item" onClick={handleCollapseClose}>
+          <Link to="/teams">Teams</Link>
+        </div>
+      ) : null}
       <div className="MainNavbar-Item" onClick={handleCollapseClose}>
         <Link to="/projects">Projects</Link>
       </div>

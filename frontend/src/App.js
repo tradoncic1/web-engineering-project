@@ -11,6 +11,7 @@ import Login from "./Pages/Login/Login";
 import "./App.scss";
 import Tasks from "./Pages/Tasks/Tasks";
 import EditProfile from "./Pages/EditProfile/EditProfile";
+import Teams from "./Pages/Teams/Teams";
 
 const App = () => {
   return (
@@ -26,6 +27,7 @@ const App = () => {
           <Route exact path="/tasks/:projectKey" component={Tasks} />
           <Route exact path="/projects" component={Projects} />
           <Route exact path="/editProfile" component={EditProfile} />
+          <Route exact path="/teams" component={Teams} />
         </Switch>
       </Router>
     </div>
