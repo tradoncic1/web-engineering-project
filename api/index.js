@@ -26,7 +26,6 @@ const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 
 app.use("/", express.static("../frontend/build"));
-app.use("*", express.static("../frontend/build"));
 // if (__dirname.slice(-6) === "/build") {
 //   // For production
 //   app.use(express.static(__dirname));
