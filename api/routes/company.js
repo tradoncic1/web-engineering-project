@@ -1,4 +1,4 @@
-module.exports = (router, db, mongojs, jwt, config, nodemailer) => {
+module.exports = (router, db, mongojs, jwt, config, nodemailer, addLogs) => {
   router.use((req, res, next) => {
     console.log(`Company route accessed by: ${req.ip}`); // log visits
 
@@ -45,13 +45,16 @@ module.exports = (router, db, mongojs, jwt, config, nodemailer) => {
    *         description: Something is wrong with service please contact system administrator
    */
   router.get("/search/:username", (req, res) => {
-    db.members.find({ owner: req.params.username }, (err, docs) => {
-      if (err) {
-        res.status(500).send("An error occured");
-      } else {
-        res.status(200).send(docs);
+    db.members.find(
+      { owner: req.params.username, isDeleted: false },
+      (err, docs) => {
+        if (err) {
+          res.status(500).send("An error occured");
+        } else {
+          res.status(200).send(docs);
+        }
       }
-    });
+    );
   });
 
   /**
@@ -158,6 +161,8 @@ module.exports = (router, db, mongojs, jwt, config, nodemailer) => {
                   }
                 });
 
+                addLogs(req.body.username, "joined");
+
                 res.status(200).send(response);
               }
             }
@@ -167,5 +172,26 @@ module.exports = (router, db, mongojs, jwt, config, nodemailer) => {
     } catch (error) {
       res.status(400).send(error);
     }
+  });
+
+  router.delete("/:username", (req, res) => {
+    db.members.find(
+      { username: req.params.username, isDeleted: false },
+      (errFind, resFind) => {
+        if (!errFind) {
+          db.members.update(
+            { username: req.params.username },
+            { $set: { isDeleted: true } },
+            (err, doc) => {
+              if (err) {
+                res.send(err);
+              } else {
+                res.send(doc);
+              }
+            }
+          );
+        }
+      }
+    );
   });
 };

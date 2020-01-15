@@ -186,6 +186,7 @@ const Teams = props => {
                 username={member.username}
                 email={member.email}
                 created={member.created}
+                fetchMembers={fetchMembers}
               />
             );
           })}

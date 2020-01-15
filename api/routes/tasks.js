@@ -1,4 +1,4 @@
-module.exports = (router, db, mongojs, jwt, config) => {
+module.exports = (router, db, mongojs, jwt, config, addLogs) => {
   let role = 4;
   router.use((req, res, next) => {
     console.log(`Tasks route accessed by: ${req.ip}`); // log visits
@@ -41,6 +41,7 @@ module.exports = (router, db, mongojs, jwt, config) => {
             .status(400)
             .send(`Insertion failed! Reason: ${error.errmsg}`);
         } else {
+          addLogs(req.body.username, `created task ${req.body.title}`);
           res.send(response);
         }
       }
@@ -49,11 +50,14 @@ module.exports = (router, db, mongojs, jwt, config) => {
 
   router.post("/search", async (req, res) => {
     if (role === 1) {
-      db.tasks.find({ projectKey: req.body.projectKey }, (errTsk, docsTsk) => {
-        if (docsTsk) {
-          res.status(200).send(docsTsk);
+      db.tasks.find(
+        { projectKey: req.body.projectKey, isDeleted: false },
+        (errTsk, docsTsk) => {
+          if (docsTsk) {
+            res.status(200).send(docsTsk);
+          }
         }
-      });
+      );
     } else {
       db.tasks.find(
         { projectKey: req.body.projectKey, username: req.body.username },
@@ -71,29 +75,35 @@ module.exports = (router, db, mongojs, jwt, config) => {
 
     console.log(req.body);
 
-    db.tasks.update(
-      { _id: mongojs.ObjectId(taskToUpdate) },
-      { $set: { status: req.body.status } },
+    db.tasks.findAndModify(
+      {
+        query: { _id: mongojs.ObjectId(taskToUpdate) },
+        update: { $set: { status: req.body.status } }
+      },
       (error, response) => {
         if (error) {
           return res.status(400).send(`Update failed! Reason: ${error.errmsg}`);
         } else {
+          addLogs(req.params.username, `updated task ${response.title}`);
           res.send(response);
         }
       }
     );
   });
 
-  router.put("/delete", (req, res) => {
+  router.post("/delete", (req, res) => {
     const taskToUpdate = req.body.id;
 
-    db.tasks.update(
-      { _id: mongojs.ObjectId(taskToUpdate) },
-      { $set: { isDeleted: true } },
+    db.tasks.findAndModify(
+      {
+        query: { _id: mongojs.ObjectId(taskToUpdate) },
+        update: { $set: { isDeleted: true } }
+      },
       (error, response) => {
         if (error) {
           return res.status(400).send(`Delete failed! Reason: ${error.errmsg}`);
         } else {
+          addLogs(req.body.username, `deleted task ${response.title}`);
           res.send(response);
         }
       }

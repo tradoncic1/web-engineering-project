@@ -4,6 +4,7 @@ import { faTrash } from "@fortawesome/free-solid-svg-icons";
 import "./TeamCard.scss";
 import { Card, Row, Col, CardFooter, CardBody } from "reactstrap";
 import moment from "moment";
+import company from "../../api/company";
 
 const TeamCard = props => {
   const { firstName, lastName, username, email, created } = props;
@@ -25,7 +26,13 @@ const TeamCard = props => {
           Joined: {moment(created).fromNow()}
         </Row>
       </CardBody>
-      <CardFooter className="TeamCard-Footer">
+      <CardFooter
+        className="TeamCard-Footer"
+        onClick={async () => {
+          await company.delete(username);
+          props.fetchMembers();
+        }}
+      >
         <FontAwesomeIcon icon={faTrash} />
       </CardFooter>
     </Card>

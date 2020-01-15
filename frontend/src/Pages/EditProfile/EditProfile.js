@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import "./EditProfile.scss";
 import { withRouter } from "react-router";
-import { users } from "../../api";
+import { users, company } from "../../api";
 import { parseJwt } from "../../utils";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import {
@@ -60,20 +60,29 @@ const EditProfile = props => {
   };
 
   const handleSubmit = async () => {
-    await users.update(profileInfo.username, input);
+    if (parseJwt(localStorage.getItem("jwt")).role === 2) {
+      await company.update(profileInfo.username, input);
+    } else {
+      await users.update(profileInfo.username, input);
+    }
   };
 
   return (
     <div className="EditProfile-Page">
       <Modal isOpen={modalShow} toggle={() => setModalShow(!modalShow)}>
         <ModalHeader>Are you sure?</ModalHeader>
-        <ModalBody>This action cannot be undone later!</ModalBody>
+        <ModalBody>
+          This action cannot be undone later! This will log you out and you will
+          need to log in with your credentials again.
+        </ModalBody>
         <ModalFooter>
           <Button
             color="primary"
             onClick={async () => {
               await users.upgrade(profileInfo.username);
               setModalShow(false);
+              localStorage.removeItem("jwt");
+              props.history.push("/");
             }}
           >
             Yes

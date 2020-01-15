@@ -1,29 +1,21 @@
 import axios from "./axios";
-import { BASE_URL } from "../utils";
+import { BASE_URL, getHeaders } from "../utils";
 
 export default {
   addTask: (projectKey, body) =>
     axios.post(`${BASE_URL}/tasks/create/${projectKey}`, body, {
-      headers: {
-        auth: localStorage.getItem("jwt")
-      }
+      headers: getHeaders()
     }),
   getTasks: body =>
     axios.post(`${BASE_URL}/tasks/search`, body, {
-      headers: {
-        auth: localStorage.getItem("jwt")
-      }
+      headers: getHeaders()
     }),
   status: (username, body) =>
     axios.put(`${BASE_URL}/tasks/status/${username}`, body, {
-      headers: {
-        auth: localStorage.getItem("jwt")
-      }
+      headers: getHeaders()
     }),
-  delete: (username, body) =>
-    axios.put(`${BASE_URL}/tasks/delete`, body, {
-      headers: {
-        auth: localStorage.getItem("jwt")
-      }
+  delete: body =>
+    axios.post(`${BASE_URL}/tasks/delete`, body, {
+      headers: getHeaders()
     })
 };

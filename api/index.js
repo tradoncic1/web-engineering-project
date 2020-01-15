@@ -35,6 +35,14 @@ app.use("/", express.static("../frontend/build"));
 // }
 // app.use(express.static("../frontend/build"));
 
+const addLog = (username, action, timestamp) => {
+  db.logs.insert({
+    username: username,
+    action: action,
+    timestamp: Date.now()
+  });
+};
+
 app.use((req, res, next) => {
   res.header("Access-Control-Allow-Origin", "*");
 
@@ -69,23 +77,24 @@ require("./routes/company.js")(
   mongojs,
   jwt,
   config,
-  nodemailer
+  nodemailer,
+  addLog
 );
 app.use("/company", company_router);
 
 //tickets router setup
 let tasks_router = express.Router();
-require("./routes/tasks")(tasks_router, db, mongojs, jwt, config);
+require("./routes/tasks")(tasks_router, db, mongojs, jwt, config, addLog);
 app.use("/tasks", tasks_router);
 
 //users router setup
 let users_router = express.Router();
-require("./routes/users")(users_router, db, mongojs, jwt, config);
+require("./routes/users")(users_router, db, mongojs, jwt, config, addLog);
 app.use("/users", users_router);
 
 //projects router setup
 let projects_router = express.Router();
-require("./routes/projects")(projects_router, db, mongojs, jwt, config);
+require("./routes/projects")(projects_router, db, mongojs, jwt, config, addLog);
 app.use("/projects", projects_router);
 
 /** Swagger setup */

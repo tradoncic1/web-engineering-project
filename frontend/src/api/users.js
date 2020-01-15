@@ -11,5 +11,7 @@ export default {
   upgrade: username =>
     axios.post(`${BASE_URL}/users/upgrade/${username}`, {
       headers: getHeaders()
-    })
+    }),
+  getLogs: body =>
+    axios.post(`${BASE_URL}/users/logs`, body, { headers: getHeaders() })
 };

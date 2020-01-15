@@ -49,7 +49,7 @@ const TaskCard = ({
   const handleDelete = async () => {
     const username = parseJwt(localStorage.getItem("jwt")).username;
 
-    await tasks.delete(username, { id: id });
+    await tasks.delete({ id: id, username: username });
 
     setAddedTask(!addedTask);
   };

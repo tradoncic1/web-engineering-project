@@ -1,4 +1,4 @@
-module.exports = (router, db, mongojs, jwt, config) => {
+module.exports = (router, db, mongojs, jwt, config, addLogs) => {
   router.use((req, res, next) => {
     console.log(`Projects route accessed by: ${req.ip}`); // log visits
 
@@ -48,6 +48,7 @@ module.exports = (router, db, mongojs, jwt, config) => {
             .send({ message: "An error occuredwhile creating the project" });
         } else {
           console.log(doc);
+          addLogs(req.params.username, `created project ${req.body.name}`);
           res.status(200).send(doc);
         }
       }
@@ -62,6 +63,7 @@ module.exports = (router, db, mongojs, jwt, config) => {
         if (err) {
           res.status(500).send({ message: "Errorino" });
         } else {
+          addLogs(req.params.username, `deleted project ${doc.name}`);
           res.send(doc);
         }
       }

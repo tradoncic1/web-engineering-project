@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import MainNavbar from "../../Components/Navbars/MainNavbar";
 import {
   Row,
@@ -13,15 +13,29 @@ import {
   Label,
   Input,
   Form,
-  ModalFooter
+  ModalFooter,
+  CardFooter,
+  CardTitle,
+  CardBody,
+  CardHeader,
+  ListGroup,
+  ListGroupItem,
+  Badge,
+  ButtonGroup
 } from "reactstrap";
 import { withRouter } from "react-router";
 import { checkToken, parseJwt } from "../../utils";
 import { users, company, projects } from "../../api";
 import "./Projects.scss";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import { faPlusCircle, faTrashAlt } from "@fortawesome/free-solid-svg-icons";
+import {
+  faPlusCircle,
+  faTrashAlt,
+  faArrowLeft,
+  faArrowRight
+} from "@fortawesome/free-solid-svg-icons";
 import { toast } from "react-toastify";
+import moment from "moment";
 
 const Projects = props => {
   const [profileInfo, setProfileInfo] = useState({
@@ -43,10 +57,13 @@ const Projects = props => {
     description: ""
   });
   const [projectList, setProjectList] = useState([]);
+  const [activityLogs, setActivityLogs] = useState([]);
   const [userModal, setUserModal] = useState(false);
   const [projectModal, setProjectModal] = useState(false);
   const [isLoadingProfile, setIsLoadingProfile] = useState(false);
   const [isLoadingProjects, setIsLoadingProjects] = useState(false);
+  const [isLoadingActivity, setIsLoadingActivity] = useState(false);
+  const [currentLogsPage, setCurrentLogsPage] = useState(0);
 
   const fetchProfileData = async () => {
     setIsLoadingProfile(true);
@@ -58,6 +75,7 @@ const Projects = props => {
       const projectUsername =
         res.data.role === 2 ? res.data.owner : res.data.username;
       fetchProjects(projectUsername);
+      //fetchActivityLogs(res.data.username);
     });
 
     setIsLoadingProfile(false);
@@ -80,6 +98,24 @@ const Projects = props => {
 
     setIsLoadingProjects(false);
   };
+
+  const fetchActivityLogs = async () => {
+    setIsLoadingActivity(true);
+    await users
+      .getLogs({
+        username: parseJwt(localStorage.getItem("jwt")).username,
+        page: currentLogsPage
+      })
+      .then(res => {
+        console.log(res.data);
+        setActivityLogs(res.data);
+      });
+    setIsLoadingActivity(false);
+  };
+
+  useEffect(() => {
+    fetchActivityLogs();
+  }, [currentLogsPage]);
 
   const toggleUserModal = () => setUserModal(!userModal);
   const toggleProjectModal = () => setProjectModal(!projectModal);
@@ -121,8 +157,14 @@ const Projects = props => {
 
   const handleProjectSubmit = async () => {
     const username = parseJwt(localStorage.getItem("jwt")).username;
+    console.log(`${projectInput.key}${username}`);
     await projects
-      .create(username, projectInput)
+      .create(username, {
+        name: projectInput.name,
+        description: projectInput.description,
+        key: `${projectInput.key}${username}`,
+        owner: username
+      })
       .then(res => {
         const tmpProject = {
           name: projectInput.name,
@@ -138,7 +180,8 @@ const Projects = props => {
     setProjectModal(false);
   };
 
-  const handleProjectDelete = async key => {
+  const handleProjectDelete = async (event, key) => {
+    event.stopPropagation();
     const username =
       profileInfo.role === 2 ? profileInfo.owner : profileInfo.username;
     await projects.delete(username, key).then(res => {
@@ -312,7 +355,7 @@ const Projects = props => {
       </Row>
       <Row className="Projects-ListWrap">
         <Col md={2} />
-        <Col md={8}>
+        <Col md={7}>
           <Row className="Projects-CardWrap">
             {parseJwt(localStorage.getItem("jwt")).role === 2 ? null : (
               <Card className="Projects-Card" onClick={toggleProjectModal}>
@@ -335,19 +378,76 @@ const Projects = props => {
                       )
                     }
                   >
+                    {project.name}
                     {profileInfo.role === 2 ? null : (
                       <FontAwesomeIcon
                         className="Projects-Delete"
                         icon={faTrashAlt}
-                        onClick={() => handleProjectDelete(project.key)}
+                        onClick={event =>
+                          handleProjectDelete(event, project.key)
+                        }
                       />
                     )}
-                    {project.name}
                   </Card>
                 ))}
           </Row>
         </Col>
-        <Col md={2} />
+        <Col md={3}>
+          <Card>
+            <CardHeader>
+              <b>Activity Log:</b>
+            </CardHeader>
+            <ListGroup>
+              {isLoadingActivity ? (
+                <Spinner />
+              ) : activityLogs.length === 0 ? (
+                "No logs to display"
+              ) : (
+                activityLogs.records.map((activity, index) => {
+                  return (
+                    <ListGroupItem key={index}>
+                      <Row>
+                        {activity.username} {activity.action}
+                      </Row>
+                      <Row>
+                        <Badge pill>
+                          {moment(activity.timestamp).fromNow()}
+                        </Badge>
+                      </Row>
+                    </ListGroupItem>
+                  );
+                })
+              )}
+            </ListGroup>
+            <CardFooter>
+              <ButtonGroup>
+                <Button
+                  outline
+                  color="info"
+                  onClick={() => {
+                    setCurrentLogsPage(currentLogsPage - 1);
+                  }}
+                  disabled={currentLogsPage === 0}
+                >
+                  <FontAwesomeIcon icon={faArrowLeft} />
+                </Button>
+                <Button outline disabled>
+                  {currentLogsPage + 1}
+                </Button>
+                <Button
+                  outline
+                  color="info"
+                  onClick={() => {
+                    setCurrentLogsPage(currentLogsPage + 1);
+                  }}
+                  disabled={(currentLogsPage + 1) * 5 >= activityLogs.total}
+                >
+                  <FontAwesomeIcon icon={faArrowRight} />
+                </Button>
+              </ButtonGroup>
+            </CardFooter>
+          </Card>
+        </Col>
       </Row>
     </div>
   );
