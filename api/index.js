@@ -5,10 +5,6 @@ const nodemailer = require("nodemailer");
 const cors = require("cors");
 app.use(cors());
 
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "../frontend", "index.html"));
-});
-
 const port = process.env.PORT || 5000;
 
 let config;
@@ -29,7 +25,7 @@ app.use(bodyParser.json());
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 
-app.use("/", express.static("../frontend/build"));
+//app.use("/", express.static("../frontend/build"));
 // if (__dirname.slice(-6) === "/build") {
 //   // For production
 //   app.use(express.static(__dirname));
@@ -101,6 +97,10 @@ let projects_router = express.Router();
 require("./routes/projects")(projects_router, db, mongojs, jwt, config, addLog);
 app.use("/projects", projects_router);
 
+app.get("*", (req, res) => {
+  res.sendFile(path.resolve(__dirname, "../frontend/build", "index.html"));
+});
+
 /** Swagger setup */
 const swaggerDefinition = {
   info: {
@@ -132,12 +132,6 @@ app.get("/swagger.json", (req, res) => {
 });
 
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(swaggerSpec));
-
-app.get("/users", (req, res) => {
-  db.users.find({}, (err, docs) => {
-    res.json(docs);
-  });
-});
 
 /**
  * @swagger
