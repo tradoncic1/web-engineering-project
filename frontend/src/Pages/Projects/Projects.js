@@ -175,6 +175,7 @@ const Projects = props => {
         const tmpProjList = [tmpProject, ...projectList];
         setProjectList([]);
         setProjectList(tmpProjList);
+        fetchActivityLogs(username);
       })
       .catch(e => toast.warn("An error occured while creating the project"));
     setProjectModal(false);
@@ -189,6 +190,7 @@ const Projects = props => {
 
       setProjectList([]);
       setProjectList(newProjectList);
+      fetchActivityLogs(profileInfo.username);
     });
   };
 

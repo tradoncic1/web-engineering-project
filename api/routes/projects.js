@@ -63,7 +63,13 @@ module.exports = (router, db, mongojs, jwt, config, addLogs) => {
         if (err) {
           res.status(500).send({ message: "Errorino" });
         } else {
-          addLogs(req.params.username, `deleted project ${doc.name}`);
+          addLogs(
+            req.params.username,
+            `deleted project with key ${req.params.key.substring(
+              0,
+              req.params.key.length - req.params.username.length
+            )}`
+          );
           res.send(doc);
         }
       }
