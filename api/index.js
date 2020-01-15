@@ -6,9 +6,7 @@ const cors = require("cors");
 app.use(cors());
 
 app.get("*", (req, res) => {
-  res.sendFile(
-    path.resolve(__dirname, "the path to your react project", "index.html")
-  );
+  res.sendFile(path.resolve(__dirname, "../frontend", "index.html"));
 });
 
 const port = process.env.PORT || 5000;
