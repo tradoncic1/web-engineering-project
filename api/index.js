@@ -98,7 +98,7 @@ require("./routes/projects")(projects_router, db, mongojs, jwt, config, addLog);
 app.use("/projects", projects_router);
 
 app.get("*", function(request, response) {
-  response.sendFile(__dirname + "../frontend/public/" + "index.html");
+  response.sendFile("frontend/public/" + "index.html");
 });
 
 /** Swagger setup */
