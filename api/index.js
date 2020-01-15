@@ -5,6 +5,12 @@ const nodemailer = require("nodemailer");
 const cors = require("cors");
 app.use(cors());
 
+app.get("*", (req, res) => {
+  res.sendFile(
+    path.resolve(__dirname, "the path to your react project", "index.html")
+  );
+});
+
 const port = process.env.PORT || 5000;
 
 let config;
