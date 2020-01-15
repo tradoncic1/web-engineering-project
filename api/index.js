@@ -25,7 +25,8 @@ app.use(bodyParser.json());
 const swaggerJSDoc = require("swagger-jsdoc");
 const swaggerUi = require("swagger-ui-express");
 
-//app.use("/", express.static("../frontend/build"));
+app.use("/", express.static("../frontend/build"));
+app.use("*", express.static("../frontend/build"));
 // if (__dirname.slice(-6) === "/build") {
 //   // For production
 //   app.use(express.static(__dirname));
@@ -96,10 +97,6 @@ app.use("/users", users_router);
 let projects_router = express.Router();
 require("./routes/projects")(projects_router, db, mongojs, jwt, config, addLog);
 app.use("/projects", projects_router);
-
-app.get("*", function(request, response) {
-  response.sendFile("frontend/public/" + "index.html");
-});
 
 /** Swagger setup */
 const swaggerDefinition = {
