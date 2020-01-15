@@ -97,8 +97,10 @@ let projects_router = express.Router();
 require("./routes/projects")(projects_router, db, mongojs, jwt, config, addLog);
 app.use("/projects", projects_router);
 
-app.get("*", (req, res) => {
-  res.sendFile(path.resolve(__dirname, "frontend/build", "index.html"));
+app.get("*", function(request, response) {
+  response.sendFile(
+    path.resolve(__dirname, "../frontend/public", "index.html")
+  );
 });
 
 /** Swagger setup */
